@@ -14,10 +14,10 @@ export function Dialog({ open, onOpenChange, children }: { open: boolean; onOpen
   return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>
 }
 
-export function DialogTrigger({ asChild, children }: { asChild?: boolean; children: React.ReactElement }) {
+export function DialogTrigger({ asChild, children }: { asChild?: boolean; children: React.ReactElement<{ onClick?: (e: React.MouseEvent) => void }> }) {
   const { onOpenChange } = useContext(DialogContext)
   if (!onOpenChange) return children
-  const child = React.Children.only(children)
+  const child = React.Children.only(children) as React.ReactElement<{ onClick?: (e: React.MouseEvent) => void }>
   const props = {
     onClick: (e: React.MouseEvent) => {
       child.props.onClick?.(e)
