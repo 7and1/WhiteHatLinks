@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo'
 import { CheckCircle, Shield, TrendingUp, Users, Zap, Target } from 'lucide-react'
 
-export const revalidate = 86400
+// Force dynamic rendering - needs live D1 data
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Premium Backlinks Without Spam | White Hat Link Building',
@@ -86,7 +87,7 @@ const homepageFaqs = [
 ]
 
 export default async function HomePage() {
-  const payload = await getPayloadHMR({ config: configPromise })
+  const payload = await getPayload({ config: configPromise })
 
   const { docs: recent } = await payload.find({
     collection: 'inventory',

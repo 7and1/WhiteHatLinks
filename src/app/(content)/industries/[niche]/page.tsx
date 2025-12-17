@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { InventoryTable } from '@/components/inventory/Table'
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo'
@@ -8,7 +8,8 @@ import { notFound } from 'next/navigation'
 import { getIndustryData, getAllIndustries } from '@/data/industries'
 import { CheckCircle, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react'
 
-export const revalidate = 43200
+// Force dynamic rendering - needs live D1 data
+export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ niche: string }>
@@ -46,7 +47,7 @@ export default async function IndustryPage({ params }: PageProps) {
     return notFound()
   }
 
-  const payload = await getPayloadHMR({ config: configPromise })
+  const payload = await getPayload({ config: configPromise })
 
   const { docs: items } = await payload.find({
     collection: 'inventory',

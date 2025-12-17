@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { BreadcrumbSchema } from '@/components/seo'
 
-export const revalidate = 3600
+// Force dynamic rendering - needs live D1 data
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Blog - Link Building Insights & Strategies',
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogListPage() {
-  const payload = await getPayloadHMR({ config: configPromise })
+  const payload = await getPayload({ config: configPromise })
   const { docs } = await payload.find({
     collection: 'posts',
     limit: 20,

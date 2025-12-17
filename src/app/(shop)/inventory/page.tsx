@@ -1,11 +1,12 @@
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { InventoryTable } from '@/components/inventory/Table'
 import { ProductSchema } from '@/components/seo/Schema'
 import { BreadcrumbSchema } from '@/components/seo'
 import type { Metadata } from 'next'
 
-export const dynamic = 'force-dynamic' // keep live inventory fresh
+// Force dynamic rendering - needs live D1 data
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Premium Backlink Inventory',
@@ -37,7 +38,7 @@ export default async function InventoryPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const params = await searchParams
-  const payload = await getPayloadHMR({ config: configPromise })
+  const payload = await getPayload({ config: configPromise })
 
   const nicheFilter = typeof params.niche === 'string' ? params.niche : undefined
   const minDr = typeof params.min_dr === 'string' ? parseInt(params.min_dr) : 0
