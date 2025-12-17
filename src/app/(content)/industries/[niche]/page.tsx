@@ -11,11 +11,12 @@ import { CheckCircle, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react
 export const revalidate = 43200
 
 interface PageProps {
-  params: { niche: string }
+  params: Promise<{ niche: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const industry = getIndustryData(params.niche)
+  const { niche } = await params
+  const industry = getIndustryData(niche)
 
   if (!industry) {
     return {
@@ -38,7 +39,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function IndustryPage({ params }: PageProps) {
-  const industry = getIndustryData(params.niche)
+  const { niche } = await params
+  const industry = getIndustryData(niche)
 
   if (!industry) {
     return notFound()

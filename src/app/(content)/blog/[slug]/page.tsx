@@ -9,14 +9,15 @@ import { ArrowLeft } from 'lucide-react'
 export const revalidate = 3600
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
   const payload = await getPayloadHMR({ config: configPromise })
   const { docs } = await payload.find({
     collection: 'posts',
-    where: { slug: { equals: params.slug } },
+    where: { slug: { equals: slug } },
     limit: 1,
   })
   const post = docs[0]
@@ -47,10 +48,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params
   const payload = await getPayloadHMR({ config: configPromise })
   const { docs } = await payload.find({
     collection: 'posts',
-    where: { slug: { equals: params.slug } },
+    where: { slug: { equals: slug } },
     limit: 1,
   })
   const post = docs[0]
