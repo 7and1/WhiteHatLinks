@@ -1,11 +1,14 @@
 import type { MetadataRoute } from 'next'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+
+// Force dynamic rendering - sitemap needs live data from D1
+export const dynamic = 'force-dynamic'
 
 const base = 'https://whitehatlinks.io'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const payload = await getPayloadHMR({ config: configPromise })
+  const payload = await getPayload({ config: configPromise })
   const { docs: posts } = await payload.find({ collection: 'posts', limit: 200, sort: '-updatedAt' })
   const { docs: inventory } = await payload.find({ collection: 'inventory', limit: 500 })
 
