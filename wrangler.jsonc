@@ -1,0 +1,38 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "whitehatlinks",
+  "compatibility_date": "2025-08-15",
+  "compatibility_flags": [
+    // Enable Node.js API
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
+    "nodejs_compat",
+    // Allow to fetch URLs in your app
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "D1",
+      "database_id": "c86d1588-0f05-4ea6-a56a-072a7213a2df",
+      "database_name": "whitehatlinks-db",
+      "remote": false
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "whlinks-media"
+    }
+  ],
+
+  // Environment Variables - REQUIRED for Cloudflare Workers
+  "vars": {
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_SERVER_URL": "https://whitehatlinks.workers.dev"
+  }
+}
