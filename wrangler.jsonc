@@ -20,7 +20,7 @@
       "binding": "D1",
       "database_id": "c86d1588-0f05-4ea6-a56a-072a7213a2df",
       "database_name": "whitehatlinks-db",
-      "remote": false
+      "remote": true
     }
   ],
   "r2_buckets": [
