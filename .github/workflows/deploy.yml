@@ -50,6 +50,8 @@ jobs:
           command: deploy
           secrets: |
             PAYLOAD_SECRET
+        env:
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
 
       - name: Optimize D1 database
         env:
