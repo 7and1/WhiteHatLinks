@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { InquiryDialog } from '@/app/(shop)/inventory/InquiryDialog'
+import { InquiryDialog } from '@/app/(frontend)/(shop)/inventory/InquiryDialog'
 
 export function InventoryTable({ initialData }: { initialData: any[] }) {
   const router = useRouter()
