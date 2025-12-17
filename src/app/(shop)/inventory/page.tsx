@@ -34,14 +34,15 @@ interface InventoryItem {
 export default async function InventoryPage({
   searchParams,
 }: {
-  searchParams: Record<string, string | string[] | undefined>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
+  const params = await searchParams
   const payload = await getPayloadHMR({ config: configPromise })
 
-  const nicheFilter = typeof searchParams.niche === 'string' ? searchParams.niche : undefined
-  const minDr = typeof searchParams.min_dr === 'string' ? parseInt(searchParams.min_dr) : 0
+  const nicheFilter = typeof params.niche === 'string' ? params.niche : undefined
+  const minDr = typeof params.min_dr === 'string' ? parseInt(params.min_dr) : 0
   const maxPrice =
-    typeof searchParams.max_price === 'string' ? parseInt(searchParams.max_price) : undefined
+    typeof params.max_price === 'string' ? parseInt(params.max_price) : undefined
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: any = {
