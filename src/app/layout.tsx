@@ -98,7 +98,7 @@ const navLinks = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -220,7 +220,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
 
             <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-              <p>&copy; {new Date().getFullYear()} WhiteHatLinks. All rights reserved.</p>
+              <p>&copy; 2025 WhiteHatLinks. All rights reserved.</p>
               <div className="flex gap-6">
                 <Link href="/terms" className="hover:text-primary transition-colors">
                   Terms of Service
