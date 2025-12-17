@@ -112,12 +112,13 @@ export default async function BlogPostPage({ params }: PageProps) {
             {post.metaDescription && (
               <p className="text-lg text-muted-foreground lead">{post.metaDescription}</p>
             )}
-            {/* Using prose class for safe HTML rendering */}
-            {post.contentHtml && (
-              <div
-                className="mt-8"
-                dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-              />
+            {/* Lexical rich text content will be rendered by PayloadCMS */}
+            {post.content && (
+              <div className="mt-8">
+                <p className="text-muted-foreground">
+                  Content available in admin panel. Full rendering coming soon.
+                </p>
+              </div>
             )}
           </article>
 
