@@ -18,7 +18,7 @@ export function InquiryDialog({ item }: { item: any }) {
       await fetch('/api/inquire', { method: 'POST', body: formData })
       toast({ title: 'Request received', description: `We will send the domain and invoice for ${item.niche}.` })
     } catch (err) {
-      toast({ title: 'Failed to send', description: 'Please email hello@whitehatlinks.io' })
+      toast({ title: 'Failed to send', description: 'Please email hello@whitehatlink.org' })
     }
     setOpen(false)
   }

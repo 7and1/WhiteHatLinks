@@ -74,8 +74,8 @@ export async function POST(request: Request) {
     // TODO: Integrate with email service (Resend, etc.) in production
     // Example:
     // await resend.emails.send({
-    //   from: 'notifications@whitehatlinks.io',
-    //   to: 'team@whitehatlinks.io',
+    //   from: 'notifications@whitehatlink.org',
+    //   to: 'team@whitehatlink.org',
     //   subject: `New inquiry from ${validation.data.email}`,
     //   text: `...`,
     // })
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error processing inquiry:', error)
     return NextResponse.json(
-      { error: 'An unexpected error occurred. Please try again or email hello@whitehatlinks.io' },
+      { error: 'An unexpected error occurred. Please try again or email hello@whitehatlink.org' },
       { status: 500 }
     )
   }

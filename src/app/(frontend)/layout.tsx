@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
+import { Toaster } from 'sonner'
 import './globals.css'
 import { OrganizationSchema, WebSiteSchema } from '@/components/seo'
 
@@ -17,7 +18,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://whitehatlinks.io'),
+  metadataBase: new URL('https://whitehatlink.org'),
   title: {
     default: 'WhiteHatLinks | Premium Backlinks Without Spam',
     template: '%s | WhiteHatLinks',
@@ -45,14 +46,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://whitehatlinks.io',
+    url: 'https://whitehatlink.org',
     siteName: 'WhiteHatLinks',
     title: 'WhiteHatLinks | Premium Backlinks Without Spam',
     description:
       'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam.',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og',
         width: 1200,
         height: 630,
         alt: 'WhiteHatLinks - Premium Backlink Acquisition',
@@ -64,7 +65,7 @@ export const metadata: Metadata = {
     title: 'WhiteHatLinks | Premium Backlinks Without Spam',
     description:
       'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam.',
-    images: ['/og-image.png'],
+    images: ['/og'],
   },
   robots: {
     index: true,
@@ -78,13 +79,16 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
+      { url: '/favicon.ico' },
+    ],
+    shortcut: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
   alternates: {
-    canonical: 'https://whitehatlinks.io',
+    canonical: 'https://whitehatlink.org',
   },
 }
 
@@ -106,6 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WebSiteSchema />
       </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
+        <Toaster position="top-right" richColors closeButton />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-white"
@@ -114,11 +119,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
 
         <header className="sticky top-0 z-20 border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-          <div className="container flex items-center justify-between py-4">
+          <div className="container flex items-center justify-between py-5">
             <Link
               href="/"
-              className="font-bold text-lg tracking-tight text-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-2 font-bold text-lg tracking-tight text-foreground hover:text-primary transition-colors"
             >
+              <img src="/favicon.svg" alt="" width={28} height={28} className="shrink-0" />
               WhiteHatLinks
             </Link>
             <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm">

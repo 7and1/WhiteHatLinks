@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import { getInventory } from '@/lib/inventory-source'
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo'
 import { CheckCircle, Shield, TrendingUp, Users, Zap, Target } from 'lucide-react'
 
@@ -9,17 +8,17 @@ import { CheckCircle, Shield, TrendingUp, Users, Zap, Target } from 'lucide-reac
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Premium Backlinks Without Spam | White Hat Link Building',
+  title: 'Buy Quality Backlinks | Premium White Hat Link Building Service',
   description:
-    'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no footprints. Guest posts and link insertions on real sites with real traffic.',
+    'Buy quality backlinks from real websites with traffic. No spam, no PBNs. Vetted guest posts and link insertions. 10+ years SEO expertise. See metrics before you buy.',
   alternates: {
-    canonical: 'https://whitehatlinks.io',
+    canonical: 'https://whitehatlink.org',
   },
   openGraph: {
-    title: 'WhiteHatLinks | Premium Backlinks Without Spam',
+    title: 'Buy Quality Backlinks | WhiteHatLinks Premium Link Building',
     description:
-      'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no footprints.',
-    url: 'https://whitehatlinks.io',
+      'Buy quality backlinks from real websites with traffic. No spam, no PBNs. Vetted guest posts and link insertions.',
+    url: 'https://whitehatlink.org',
   },
 }
 
@@ -72,33 +71,36 @@ const homepageFaqs = [
   {
     question: 'What is WhiteHatLinks?',
     answer:
-      'WhiteHatLinks is a premium backlink acquisition service. We provide vetted, high-authority guest posts and link insertions on real websites with genuine traffic.',
+      'WhiteHatLinks is a premium backlink acquisition service built by SEO experts with 10+ years of experience. We provide vetted, high-authority guest posts and link insertions on real websites with genuine traffic. No spam networks, no risky shortcuts.',
   },
   {
     question: 'How do you vet the sites?',
     answer:
-      'Every site goes through our 12-point vetting process including traffic verification, spam score check, content quality review, and link profile analysis.',
+      'Every site goes through our 12-point vetting process including traffic verification, spam score check, content quality review, and link profile analysis. We manually check each domain to ensure it meets our strict quality standards.',
   },
   {
     question: 'What metrics do you show before purchase?',
     answer:
       'You see Domain Rating (DR), estimated organic traffic, niche category, region, and price. The actual domain is revealed after qualifying to protect publisher relationships.',
   },
+  {
+    question: 'How long does it take to see results from backlinks?',
+    answer:
+      'Based on industry data, most link-building campaigns take about 3 months to show noticeable results. We focus on quality over quantity because 93.8% of successful SEO experts prioritize link quality.',
+  },
+  {
+    question: 'Why should I buy backlinks instead of building them myself?',
+    answer:
+      'Cold outreach has only an 8.5% success rate. Our team has 10+ years of relationships and a 90% acceptance rate. We save you time and get better placements on higher-quality sites.',
+  },
 ]
 
 export default async function HomePage() {
-  const payload = await getPayload({ config: configPromise })
-
-  const { docs: recent } = await payload.find({
-    collection: 'inventory',
-    where: { status: { equals: 'Available' } },
-    limit: 3,
-    sort: '-createdAt',
-  })
+  const recent = await getInventory({ limit: 3, sort: 'recent' })
 
   return (
     <>
-      <BreadcrumbSchema items={[{ name: 'Home', url: 'https://whitehatlinks.io' }]} />
+      <BreadcrumbSchema items={[{ name: 'Home', url: 'https://whitehatlink.org' }]} />
       <FAQSchema faqs={homepageFaqs} />
 
       <div className="container py-20 flex flex-col gap-24">
@@ -106,14 +108,14 @@ export default async function HomePage() {
         <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-center">
           <div className="space-y-6">
             <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold text-primary">
-              Premium Links, No Spam
+              Built by SEO Experts with 10+ Years Experience
             </span>
             <h1 className="text-4xl font-bold tracking-tight lg:text-5xl text-foreground">
-              Authority backlinks your brand is proud to show.
+              Buy Quality Backlinks That Actually Work
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl">
-              Curated guest posts and link insertions on real sites with traffic, vetted by humans.
-              No PBNs, no footprints, no risk.
+              Get backlinks from real websites with real traffic. No spam networks. No fake blogs.
+              Just clean, white-hat links that help you rank. See all the metrics before you buy.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -175,14 +177,74 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* Educational Content Section */}
+        <section className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-foreground mb-6">
+            Why Backlinks Matter for Your Website
+          </h2>
+          <div className="space-y-4 text-muted-foreground">
+            <p>
+              Here's the truth about SEO: backlinks are still the most important ranking factor.
+              Google looks at who links to you. It's like votes of confidence. The more quality votes
+              you have, the higher you rank.
+            </p>
+            <p>
+              But here's the problem. 95% of all web pages have zero backlinks. Zero. Most content
+              just sits there, invisible. Only 2.2% of pages get links from multiple websites. That's
+              why you need a strategy.
+            </p>
+            <p>
+              When you buy quality backlinks from WhiteHatLinks, you're working with experts who've
+              done this for 10+ years. We know what works. We know what's safe. And we know how to get
+              you results without risking penalties.
+            </p>
+          </div>
+        </section>
+
+        {/* Statistics Section */}
+        <section className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-foreground mb-6">The Data Behind Link Building</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <div className="text-3xl font-bold text-primary mb-2">3.8x</div>
+              <p className="text-sm text-muted-foreground">
+                Top-ranking pages have 3.8 times more backlinks than pages in positions 2-10.
+                Quality links directly impact your rankings.
+              </p>
+            </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <div className="text-3xl font-bold text-primary mb-2">93.8%</div>
+              <p className="text-sm text-muted-foreground">
+                Of successful SEO experts prioritize link quality over quantity. We do too. Every
+                link is manually vetted.
+              </p>
+            </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <div className="text-3xl font-bold text-primary mb-2">3 months</div>
+              <p className="text-sm text-muted-foreground">
+                Average time to see results from link building. SEO is a marathon, not a sprint. We
+                help you build sustainable growth.
+              </p>
+            </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <div className="text-3xl font-bold text-primary mb-2">8.5%</div>
+              <p className="text-sm text-muted-foreground">
+                Success rate for cold outreach. Our team has a 90% acceptance rate because we have
+                real relationships with publishers.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section */}
         <section>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">
-              Why SEO teams choose WhiteHatLinks
+              Why SEO Teams Choose WhiteHatLinks
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               We built the link building service we wished existed: transparent, safe, and effective.
+              No games. No spam. Just results.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -193,6 +255,77 @@ export default async function HomePage() {
                 <p className="mt-2 text-sm text-muted-foreground">{feature.description}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
+            How We Build Quality Backlinks
+          </h2>
+          <div className="space-y-6">
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <h3 className="text-xl font-semibold text-foreground mb-3">1. Manual Vetting</h3>
+              <p className="text-muted-foreground">
+                We check every website by hand. No automated junk. We verify traffic using real data,
+                check spam scores, review content quality, and analyze link profiles. Sites with fake
+                metrics don't make it into our inventory.
+              </p>
+            </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <h3 className="text-xl font-semibold text-foreground mb-3">
+                2. You See Metrics First
+              </h3>
+              <p className="text-muted-foreground">
+                Browse our inventory. See Domain Rating, traffic estimates, niche, and price. All
+                upfront. No surprises. The domain name stays hidden until you qualify to protect our
+                publisher relationships.
+              </p>
+            </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <h3 className="text-xl font-semibold text-foreground mb-3">
+                3. We Do the Outreach
+              </h3>
+              <p className="text-muted-foreground">
+                Our team handles everything. We pitch your content, write the article if needed, and
+                get it published. You get a live URL with your backlink. That's it. Simple.
+              </p>
+            </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <h3 className="text-xl font-semibold text-foreground mb-3">4. Quality Guarantee</h3>
+              <p className="text-muted-foreground">
+                If a link goes down, we replace it. No questions asked. We stand behind every
+                placement because we only work with reliable publishers.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Expert Background Section */}
+        <section className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-foreground mb-6">
+            Built by SEO Experts Who've Been There
+          </h2>
+          <div className="space-y-4 text-muted-foreground">
+            <p>
+              Our founder has been doing SEO for over 10 years. Started as an in-house marketer.
+              Worked with agencies. Built and sold websites. Knows what works and what doesn't.
+            </p>
+            <p>
+              The problem with most link building services? They cut corners. Use private blog
+              networks. Spam your money site with low-quality links. Then you get hit with a penalty
+              and your rankings tank.
+            </p>
+            <p>
+              We built WhiteHatLinks because we were tired of that nonsense. Every link we sell is
+              from a real website with real traffic. We show you the metrics. We do the work. You get
+              clean backlinks that actually help you rank.
+            </p>
+            <p>
+              Industry data shows that websites with 30-35 quality backlinks generate over 10,500
+              visits per month. That's the power of good link building. And it's what we help you
+              achieve.
+            </p>
           </div>
         </section>
 
@@ -213,16 +346,90 @@ export default async function HomePage() {
           ))}
         </section>
 
+        {/* Industry Trends Section */}
+        <section className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-foreground mb-6">
+            What's Working in Link Building Right Now
+          </h2>
+          <div className="space-y-4 text-muted-foreground">
+            <p>
+              The link building game is changing. In 2025, 73% of marketers believe backlinks
+              influence AI search results like ChatGPT. Google is getting smarter. Spam doesn't work
+              anymore.
+            </p>
+            <p>
+              Here's what does work: Digital PR and guest posting on real editorial sites. That's our
+              specialty. We get you placements on websites with genuine readership and editorial
+              standards.
+            </p>
+            <p>
+              Most businesses spend $1,000 to $5,000 per month on link building. But here's the
+              thing: quality matters more than quantity. One link from a high-authority site beats
+              100 links from spam blogs.
+            </p>
+            <p>
+              Content over 3,000 words gets 3.5 times more backlinks than short articles. That's why
+              we focus on creating valuable, in-depth content that people actually want to link to.
+            </p>
+          </div>
+        </section>
+
+        {/* Common Mistakes Section */}
+        <section className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-foreground mb-6">
+            Mistakes People Make When Buying Backlinks
+          </h2>
+          <div className="space-y-6">
+            <div className="rounded-xl border-l-4 border-l-red-500 bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                Buying from PBN Networks
+              </h3>
+              <p className="text-muted-foreground">
+                Private Blog Networks are spam. Google can detect them. You'll get penalized. Not
+                worth it. We only work with real editorial sites.
+              </p>
+            </div>
+            <div className="rounded-xl border-l-4 border-l-red-500 bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                Focusing Only on Domain Rating
+              </h3>
+              <p className="text-muted-foreground">
+                High DR doesn't mean anything if the site has zero traffic. We check both. DR plus
+                real organic traffic equals quality.
+              </p>
+            </div>
+            <div className="rounded-xl border-l-4 border-l-red-500 bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                Ignoring Niche Relevance
+              </h3>
+              <p className="text-muted-foreground">
+                A link from a random website doesn't help much. Topical relevance matters. We match
+                your site with publishers in your niche.
+              </p>
+            </div>
+            <div className="rounded-xl border-l-4 border-l-red-500 bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                Building Links Too Fast
+              </h3>
+              <p className="text-muted-foreground">
+                Getting 100 links in one week looks suspicious to Google. We help you build
+                naturally over time. Sustainable growth is the goal.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="rounded-2xl border bg-gradient-to-r from-primary/10 via-white to-white p-10 shadow-sm">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-center">
             <div>
               <h2 className="text-3xl font-bold text-foreground">
-                See the inventory. Ask for the URL after you qualify.
+                Ready to Buy Quality Backlinks?
               </h2>
               <p className="mt-4 max-w-xl text-muted-foreground">
-                We keep domains private to protect publisher relationships. Qualify via the table
-                filters and request a slot. We reply within 12 hours.
+                Browse our inventory. See all the metrics upfront. Choose the links that match your
+                niche. We handle everything else. Domains are revealed after you qualify to protect
+                our publisher relationships.
               </p>
               <div className="mt-6 flex gap-4">
                 <Link

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const host = 'https://whitehatlinks.io'
+  const host = 'https://whitehatlink.org'
   return {
     rules: {
       userAgent: '*',

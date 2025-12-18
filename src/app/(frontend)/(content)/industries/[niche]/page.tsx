@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { InventoryTable } from '@/components/inventory/Table'
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo'
 import { notFound } from 'next/navigation'
 import { getIndustryData, getAllIndustries } from '@/data/industries'
 import { CheckCircle, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react'
+import { getInventory, getInventoryCount, getInventoryNiches, getInventoryRegions } from '@/lib/inventory-source'
 
 // Force dynamic rendering - needs live D1 data
 export const dynamic = 'force-dynamic'
@@ -29,12 +28,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: industry.title,
     description: industry.metaDescription,
     alternates: {
-      canonical: `https://whitehatlinks.io/industries/${industry.slug}`,
+      canonical: `https://whitehatlink.org/industries/${industry.slug}`,
     },
     openGraph: {
       title: `${industry.title} | WhiteHatLinks`,
       description: industry.metaDescription,
-      url: `https://whitehatlinks.io/industries/${industry.slug}`,
+      url: `https://whitehatlink.org/industries/${industry.slug}`,
     },
   }
 }
@@ -47,17 +46,13 @@ export default async function IndustryPage({ params }: PageProps) {
     return notFound()
   }
 
-  const payload = await getPayload({ config: configPromise })
-
-  const { docs: items } = await payload.find({
-    collection: 'inventory',
-    where: {
-      niche: { contains: industry.name },
-      status: { equals: 'Available' },
-    },
-    limit: 50,
-    sort: '-dr',
-  })
+  const nicheFilter = { niche: industry.name }
+  const [items, totalCount, niches, regions] = await Promise.all([
+    getInventory({ ...nicheFilter, limit: 50, sort: 'dr' }),
+    getInventoryCount(nicheFilter),
+    getInventoryNiches(20),
+    getInventoryRegions(),
+  ])
 
   // Generate FAQ schema from challenges
   const industryFaqs = [
@@ -79,9 +74,8 @@ export default async function IndustryPage({ params }: PageProps) {
     <>
       <BreadcrumbSchema
         items={[
-          { name: 'Home', url: 'https://whitehatlinks.io' },
-          { name: 'Industries', url: 'https://whitehatlinks.io/industries/saas' },
-          { name: industry.name, url: `https://whitehatlinks.io/industries/${industry.slug}` },
+          { name: 'Home', url: 'https://whitehatlink.org' },
+          { name: `${industry.name} Link Building`, url: `https://whitehatlink.org/industries/${industry.slug}` },
         ]}
       />
       <FAQSchema faqs={industryFaqs} />
@@ -125,7 +119,12 @@ export default async function IndustryPage({ params }: PageProps) {
                 View all inventory <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <InventoryTable initialData={items} />
+            <InventoryTable
+              initialData={items}
+              totalCount={totalCount}
+              availableNiches={niches}
+              availableRegions={regions}
+            />
           </div>
         ) : (
           <div className="mb-16 rounded-xl border bg-secondary/50 p-8 text-center">

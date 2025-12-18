@@ -14,10 +14,10 @@ export function ProductSchema({ items }: { items: InventoryItem[] }) {
     "@type": "OfferCatalog",
     name: "Premium Backlink Inventory",
     description: "Curated list of high-authority guest post opportunities with transparent metrics",
-    url: "https://whitehatlinks.io/inventory",
+    url: "https://whitehatlink.org/inventory",
     numberOfItems: items.length,
     provider: {
-      "@id": "https://whitehatlinks.io/#organization",
+      "@id": "https://whitehatlink.org/#organization",
     },
     itemListElement: items.slice(0, 20).map((item, index) => ({
       "@type": "Offer",
@@ -27,7 +27,7 @@ export function ProductSchema({ items }: { items: InventoryItem[] }) {
         name: `${item.niche} Guest Post (DR ${item.dr})`,
         description: `Permanent do-follow backlink on a DR ${item.dr} ${item.niche} website with ${item.traffic?.toLocaleString() ?? 'N/A'} monthly organic traffic. Manual outreach, editorial placement.`,
         provider: {
-          "@id": "https://whitehatlinks.io/#organization",
+          "@id": "https://whitehatlink.org/#organization",
         },
         areaServed: {
           "@type": "Country",
@@ -41,7 +41,7 @@ export function ProductSchema({ items }: { items: InventoryItem[] }) {
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       seller: {
-        "@id": "https://whitehatlinks.io/#organization",
+        "@id": "https://whitehatlink.org/#organization",
       },
     })),
   }

@@ -2,17 +2,20 @@ import type { Metadata } from 'next'
 import { BreadcrumbSchema } from '@/components/seo'
 import { Mail, Clock, Shield, MessageSquare } from 'lucide-react'
 
+// Revalidate every 24 hours
+export const revalidate = 86400
+
 export const metadata: Metadata = {
-  title: 'Contact Us - Get a Custom Quote',
+  title: 'Contact WhiteHatLinks - Fast Response, Real People, No BS',
   description:
-    'Get in touch with WhiteHatLinks for custom link building quotes, partnership inquiries, or questions about our services.',
+    'Talk to real link building experts. Get custom quotes within 12 hours. NDA available for agencies. Simple process: message us, get a proposal, start ranking.',
   alternates: {
-    canonical: 'https://whitehatlinks.io/contact',
+    canonical: 'https://whitehatlink.org/contact',
   },
   openGraph: {
-    title: 'Contact WhiteHatLinks',
-    description: 'Get a custom quote for your link building needs.',
-    url: 'https://whitehatlinks.io/contact',
+    title: 'Contact WhiteHatLinks - Fast Response, Real People',
+    description: 'Talk to real link building experts. Get custom quotes within 12 hours.',
+    url: 'https://whitehatlink.org/contact',
   },
 }
 
@@ -20,7 +23,7 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    description: 'hello@whitehatlinks.io',
+    description: 'hello@whitehatlink.org',
     detail: 'We respond within 12 hours',
   },
   {
@@ -42,8 +45,8 @@ export default function ContactPage() {
     <>
       <BreadcrumbSchema
         items={[
-          { name: 'Home', url: 'https://whitehatlinks.io' },
-          { name: 'Contact', url: 'https://whitehatlinks.io/contact' },
+          { name: 'Home', url: 'https://whitehatlink.org' },
+          { name: 'Contact', url: 'https://whitehatlink.org/contact' },
         ]}
       />
 
@@ -52,11 +55,196 @@ export default function ContactPage() {
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-primary uppercase tracking-wide">Contact</p>
             <h1 className="text-4xl font-bold tracking-tight text-foreground mt-2">
-              Let&apos;s discuss your link building needs
+              Contact WhiteHatLinks
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Whether you need a custom quote, have questions about our inventory, or want to
-              explore a partnership, we&apos;re here to help.
+              Real people. Fast answers. No sales pitch.
+            </p>
+          </div>
+
+          {/* Welcome Section */}
+          <div className="mb-12 prose prose-lg max-w-none">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
+              Let&apos;s Talk About Your Link Building
+            </h2>
+            <p className="text-muted-foreground mb-4">
+              Here&apos;s the deal. We don&apos;t do phone calls with a sales team reading scripts.
+              We don&apos;t force you into a demo. We just answer your questions like normal humans.
+            </p>
+            <p className="text-muted-foreground mb-4">
+              Fill out the form below. Tell us what you need. We&apos;ll read it personally and get
+              back to you within 12 hours on business days. Usually faster.
+            </p>
+            <p className="text-muted-foreground mb-6">
+              Want links for your site? Need guest posts? Looking for agency partnership? Just ask.
+              We&apos;ll tell you exactly what we can do and what it costs. Simple.
+            </p>
+
+            <h2 className="text-2xl font-bold text-foreground mb-4 mt-8">
+              How This Works
+            </h2>
+            <div className="space-y-4 mb-6">
+              <div className="flex gap-4 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                  1
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">You Send a Message</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Fill out the form. Tell us your website URL, what kind of links you need,
+                    and your budget range. Takes 2 minutes.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">We Review Your Site</h3>
+                  <p className="text-sm text-muted-foreground">
+                    We check your website. Look at your niche. Figure out which sites in our
+                    inventory make sense for you. No cookie-cutter packages.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">You Get a Custom Quote</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Within 12 hours, we send you a proposal. Real site options. Real prices.
+                    Real metrics. Everything transparent.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                  4
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">You Decide</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Like the proposal? Great. We start immediately. Need changes? Tell us.
+                    Not interested? No problem. No pushy follow-ups.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-foreground mb-4 mt-8">
+              What to Expect After You Contact Us
+            </h2>
+            <p className="text-muted-foreground mb-4">
+              Most link building companies make you wait days. Or they spam you with calls. We don&apos;t.
+            </p>
+            <div className="bg-secondary/50 rounded-lg p-6 mb-6">
+              <h3 className="font-semibold text-foreground mb-3">Our Response Timeline:</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>First 12 hours:</strong> Initial response confirming we got your message</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Within 24 hours:</strong> Custom proposal with site options and pricing</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Within 48 hours:</strong> Answer any questions about the proposal</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-primary">•</span>
+                  <span><strong>Same week:</strong> Start your campaign if you approve</span>
+                </li>
+              </ul>
+            </div>
+
+            <h2 className="text-2xl font-bold text-foreground mb-4 mt-8">
+              Who You&apos;re Talking To
+            </h2>
+            <p className="text-muted-foreground mb-4">
+              Not a chatbot. Not a junior sales rep. You get our founder or senior team members
+              who actually understand link building. People who have built thousands of links.
+              People who know what works and what doesn&apos;t.
+            </p>
+            <p className="text-muted-foreground mb-6">
+              We&apos;ve been doing this for years. We know SEO. We know content. We know outreach.
+              And we only sell links we would use ourselves.
+            </p>
+
+            <h2 className="text-2xl font-bold text-foreground mb-4 mt-8">
+              Security and Privacy
+            </h2>
+            <p className="text-muted-foreground mb-4">
+              Your information is safe. We use secure forms. We don&apos;t sell your data.
+              We don&apos;t spam you with newsletters.
+            </p>
+            <div className="bg-primary/5 rounded-lg p-6 mb-6 border border-primary/20">
+              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Shield className="h-5 w-5 text-primary" />
+                For Agencies and Resellers:
+              </h3>
+              <p className="text-sm text-muted-foreground mb-2">
+                Need an NDA before sharing client details? We get it. Just ask and we&apos;ll send
+                one over. Many agencies white-label our services and we keep everything confidential.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Your clients will never know you work with us. All communication goes through you.
+                We&apos;re just the engine behind your results.
+              </p>
+            </div>
+
+            <h2 className="text-2xl font-bold text-foreground mb-4 mt-8">
+              Common Questions Before Contacting
+            </h2>
+            <div className="space-y-4 mb-6">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">
+                  Do I need to know my exact requirements?
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  No. Just tell us your goals. Want to rank higher? Need more organic traffic?
+                  We&apos;ll recommend what makes sense.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">
+                  What&apos;s the minimum budget?
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  We work with budgets starting at $1,000 per month. But we&apos;ll be honest
+                  if that&apos;s not enough for your goals.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">
+                  Can I see the sites before buying?
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Yes. Check our inventory page first. Or we&apos;ll send you specific site
+                  options with full metrics in your custom quote.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">
+                  Do you do contracts?
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  No long-term contracts. Month to month. Cancel anytime. We keep clients by
+                  delivering results, not by locking them in.
+                </p>
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-foreground mb-4 mt-8">
+              Ready to Start?
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              Fill out the form. We&apos;ll take it from there. If you&apos;re not sure what to write,
+              just tell us your website and budget. We&apos;ll ask the right questions in our response.
             </p>
           </div>
 

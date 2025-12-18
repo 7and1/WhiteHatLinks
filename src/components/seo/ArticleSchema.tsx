@@ -30,7 +30,7 @@ export function ArticleSchema({
       name: authorName,
     },
     publisher: {
-      "@id": "https://whitehatlinks.io/#organization",
+      "@id": "https://whitehatlink.org/#organization",
     },
     mainEntityOfPage: {
       "@type": "WebPage",

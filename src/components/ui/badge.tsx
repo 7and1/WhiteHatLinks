@@ -1,10 +1,11 @@
 import { cn } from '@/lib/utils'
 
-type Variant = 'default' | 'outline'
+type Variant = 'default' | 'outline' | 'secondary'
 
 const variants: Record<Variant, string> = {
   default: 'bg-primary text-white',
   outline: 'border border-border text-foreground bg-transparent',
+  secondary: 'bg-muted text-muted-foreground',
 }
 
 export function Badge({ children, className, variant = 'default' }: { children: React.ReactNode; className?: string; variant?: Variant }) {

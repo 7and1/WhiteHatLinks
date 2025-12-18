@@ -5,6 +5,8 @@ import configPromise from '@payload-config'
 import Link from 'next/link'
 import { BreadcrumbSchema, ArticleSchema } from '@/components/seo'
 import { ArrowLeft } from 'lucide-react'
+import { getInventory } from '@/lib/inventory-source'
+import { RichText } from '@/components/RichText'
 
 // Force dynamic rendering - needs live D1 data
 export const dynamic = 'force-dynamic'
@@ -31,12 +33,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: post.metaTitle || post.title,
     description: post.metaDescription || `Read ${post.title} on the WhiteHatLinks blog.`,
     alternates: {
-      canonical: `https://whitehatlinks.io/blog/${post.slug}`,
+      canonical: `https://whitehatlink.org/blog/${post.slug}`,
     },
     openGraph: {
       title: post.metaTitle || post.title,
       description: post.metaDescription || `Read ${post.title} on the WhiteHatLinks blog.`,
-      url: `https://whitehatlinks.io/blog/${post.slug}`,
+      url: `https://whitehatlink.org/blog/${post.slug}`,
       type: 'article',
       publishedTime: post.publishedDate || undefined,
     },
@@ -61,28 +63,25 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) return notFound()
 
   const niche = post.related_niche
-  const { docs: related } = await payload.find({
-    collection: 'inventory',
-    where: niche
-      ? { niche: { contains: niche }, status: { equals: 'Available' } }
-      : { status: { equals: 'Available' } },
+  const related = await getInventory({
+    niche: niche || undefined,
     limit: 3,
-    sort: '-dr',
+    sort: 'dr',
   })
 
   return (
     <>
       <BreadcrumbSchema
         items={[
-          { name: 'Home', url: 'https://whitehatlinks.io' },
-          { name: 'Blog', url: 'https://whitehatlinks.io/blog' },
-          { name: post.title, url: `https://whitehatlinks.io/blog/${post.slug}` },
+          { name: 'Home', url: 'https://whitehatlink.org' },
+          { name: 'Blog', url: 'https://whitehatlink.org/blog' },
+          { name: post.title, url: `https://whitehatlink.org/blog/${post.slug}` },
         ]}
       />
       <ArticleSchema
         title={post.title}
         description={post.metaDescription || `Read ${post.title} on the WhiteHatLinks blog.`}
-        url={`https://whitehatlinks.io/blog/${post.slug}`}
+        url={`https://whitehatlink.org/blog/${post.slug}`}
         publishedDate={post.publishedDate || new Date().toISOString()}
         modifiedDate={post.updatedAt || post.publishedDate || new Date().toISOString()}
       />
@@ -109,17 +108,12 @@ export default async function BlogPostPage({ params }: PageProps) {
                   })
                 : 'Draft'}
             </div>
-            <h1 className="text-foreground">{post.title}</h1>
             {post.metaDescription && (
               <p className="text-lg text-muted-foreground lead">{post.metaDescription}</p>
             )}
-            {/* Lexical rich text content will be rendered by PayloadCMS */}
+            {/* Lexical rich text content */}
             {post.content && (
-              <div className="mt-8">
-                <p className="text-muted-foreground">
-                  Content available in admin panel. Full rendering coming soon.
-                </p>
-              </div>
+              <RichText content={post.content} className="mt-8" />
             )}
           </article>
 

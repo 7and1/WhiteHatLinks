@@ -10,7 +10,7 @@ export function ServiceSchema({ services }: { services: ServiceItem[] }) {
     "@type": "Service",
     serviceType: "Link Building Services",
     provider: {
-      "@id": "https://whitehatlinks.io/#organization",
+      "@id": "https://whitehatlink.org/#organization",
     },
     areaServed: {
       "@type": "Country",

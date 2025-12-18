@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#3b5bdb"/>
+
+  <!-- White hat shape -->
+  <ellipse cx="256" cy="300" rx="140" ry="40" fill="white"/>
+  <path d="M116 300 L140 180 L372 180 L396 300" fill="white"/>
+  <ellipse cx="256" cy="180" rx="116" ry="30" fill="white"/>
+
+  <!-- Link chain icon -->
+  <g transform="translate(180, 320)">
+    <path d="M30 40 L60 40 A20 20 0 0 1 60 80 L30 80" stroke="white" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M120 40 L90 40 A20 20 0 0 0 90 80 L120 80" stroke="white" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <line x1="60" y1="60" x2="90" y2="60" stroke="white" stroke-width="12" stroke-linecap="round"/>
+  </g>
+</svg>

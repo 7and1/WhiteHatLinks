@@ -2,12 +2,12 @@ export function OrganizationSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "@id": "https://whitehatlinks.io/#organization",
+    "@id": "https://whitehatlink.org/#organization",
     name: "WhiteHatLinks",
-    url: "https://whitehatlinks.io",
+    url: "https://whitehatlink.org",
     logo: {
       "@type": "ImageObject",
-      url: "https://whitehatlinks.io/logo.png",
+      url: "https://whitehatlink.org/logo.png",
       width: 512,
       height: 512,
     },
@@ -17,7 +17,7 @@ export function OrganizationSchema() {
     sameAs: [],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "hello@whitehatlinks.io",
+      email: "hello@whitehatlink.org",
       contactType: "customer service",
       availableLanguage: ["English"],
     },
