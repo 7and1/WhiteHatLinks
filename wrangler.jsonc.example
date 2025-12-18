@@ -18,7 +18,7 @@
   "d1_databases": [
     {
       "binding": "D1",
-      "database_id": "c86d1588-0f05-4ea6-a56a-072a7213a2df",
+      "database_id": "YOUR_DATABASE_ID_HERE",
       "database_name": "whitehatlinks-db",
       "remote": false
     }
@@ -26,13 +26,13 @@
   "r2_buckets": [
     {
       "binding": "R2",
-      "bucket_name": "whlinks-media"
+      "bucket_name": "YOUR_R2_BUCKET_NAME_HERE"
     }
   ],
 
   // Environment Variables - REQUIRED for Cloudflare Workers
   "vars": {
     "NODE_ENV": "production",
-    "NEXT_PUBLIC_SERVER_URL": "https://whitehatlinks.workers.dev"
+    "NEXT_PUBLIC_SERVER_URL": "https://YOUR_WORKER_NAME.workers.dev"
   }
 }

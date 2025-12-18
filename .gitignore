@@ -16,6 +16,8 @@ dist/
 # Cloudflare local development
 .wrangler/
 .dev.vars
+wrangler.jsonc
+wrangler.toml
 
 # IDE
 .idea/
