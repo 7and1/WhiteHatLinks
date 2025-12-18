@@ -28,6 +28,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Create wrangler config from template
+        env:
+          D1_DATABASE_ID: c86d1588-0f05-4ea6-a56a-072a7213a2df
+          R2_BUCKET_NAME: whlinks-media
+          WORKER_URL: https://whitehatlinks.workers.dev
+        run: |
+          cp wrangler.jsonc.example wrangler.jsonc
+          sed -i 's/YOUR_DATABASE_ID_HERE/${{ env.D1_DATABASE_ID }}/g' wrangler.jsonc
+          sed -i 's/YOUR_R2_BUCKET_NAME_HERE/${{ env.R2_BUCKET_NAME }}/g' wrangler.jsonc
+          sed -i 's|https://YOUR_WORKER_NAME.workers.dev|${{ env.WORKER_URL }}|g' wrangler.jsonc
+
       - name: Build with OpenNext
         env:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
