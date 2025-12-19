@@ -133,7 +133,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             {/* Related Inventory */}
             <div className="rounded-lg border bg-white p-6 shadow-sm sticky top-24">
               <h3 className="text-sm font-semibold text-foreground mb-4">
-                Featured {niche ?? ''} inventory
+                Featured inventory
               </h3>
               <div className="space-y-4">
                 {related.map((item) => (
