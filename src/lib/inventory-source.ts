@@ -74,28 +74,33 @@ async function loadFromJson(): Promise<InventoryItem[] | null> {
 }
 
 async function loadFromPayload(): Promise<InventoryItem[]> {
-  const payload = await getPayload({ config: configPromise })
-  const { docs } = await payload.find({
-    collection: 'inventory',
-    limit: 500,
-    where: { status: { equals: 'Available' } },
-    sort: '-dr',
-  })
-  return docs.map((doc) => ({
-    id: String(doc.id),
-    niche: String(doc.niche),
-    dr: Number(doc.dr),
-    traffic: Number(doc.traffic),
-    price: Number(doc.price),
-    region: doc.region ? String(doc.region) : undefined,
-    domain: doc.domain ? String(doc.domain) : undefined,
-    status: String(doc.status),
-    createdAt: doc.createdAt ? String(doc.createdAt) : undefined,
-    // Default values for new fields when loading from Payload
-    spamScore: 0,
-    googleNews: false,
-    linkType: 'Unknown' as const,
-  }))
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const { docs } = await payload.find({
+      collection: 'inventory',
+      limit: 500,
+      where: { status: { equals: 'Available' } },
+      sort: '-dr',
+    })
+    return docs.map((doc) => ({
+      id: String(doc.id),
+      niche: String(doc.niche),
+      dr: Number(doc.dr),
+      traffic: Number(doc.traffic),
+      price: Number(doc.price),
+      region: doc.region ? String(doc.region) : undefined,
+      domain: doc.domain ? String(doc.domain) : undefined,
+      status: String(doc.status),
+      createdAt: doc.createdAt ? String(doc.createdAt) : undefined,
+      // Default values for new fields when loading from Payload
+      spamScore: 0,
+      googleNews: false,
+      linkType: 'Unknown' as const,
+    }))
+  } catch (err) {
+    console.error('Failed to load inventory from Payload:', err)
+    return []
+  }
 }
 
 export interface InventoryQuery {
