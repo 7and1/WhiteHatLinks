@@ -7,15 +7,15 @@ import { Check, Zap, Shield, TrendingUp, Users } from 'lucide-react'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Link Building Pricing - Transparent Costs & Real ROI',
+  title: 'Link Building Pricing - Transparent Costs & ROI Calculator | WhiteHatLinks',
   description:
-    'Honest link building pricing. Industry benchmarks show quality links cost $300-$1,500. We explain what you pay for and why it matters for your SEO.',
+    'Transparent link building pricing explained. Quality links cost $300-$1,500. See what affects prices, ROI benchmarks, and budget recommendations by industry. No hidden fees.',
   alternates: {
     canonical: 'https://whitehatlink.org/pricing',
   },
   openGraph: {
-    title: 'Link Building Pricing | WhiteHatLinks',
-    description: 'Transparent pricing for quality backlinks. See real costs, ROI data, and what affects link prices.',
+    title: 'Link Building Pricing - Transparent Costs & ROI | WhiteHatLinks',
+    description: 'Honest pricing for quality backlinks. See real costs, ROI data, and industry benchmarks.',
     url: 'https://whitehatlink.org/pricing',
   },
 }
@@ -86,7 +86,7 @@ const pricingFaqs = [
   {
     question: 'How much should I budget per month?',
     answer:
-      'Most competitive campaigns need $3,000-$15,000 per month. That gets you 5-30 quality links depending on your niche. Industries like legal or finance need more because good sites are pickier.',
+      'We recommend budgeting $3,000-$15,000 per month for competitive campaigns. That gets you 5-30 quality links depending on your niche. Industries like legal or finance need more because good sites are pickier.',
   },
   {
     question: 'Are cheap links worth it?',
@@ -248,7 +248,7 @@ export default function PricingPage() {
           </p>
 
           <p className="text-muted-foreground leading-relaxed mb-4">
-            Here&apos;s the truth about link building costs in 2025. The average quality backlink costs between $300 and $1,500. Yes, really. Some go as low as $50. Others hit $5,000. Why such a huge range? Because not all links are equal.
+            Here&apos;s the truth about link building costs in 2026. The average quality backlink costs between $300 and $1,500. Yes, really. Some go as low as $50. Others hit $5,000. Why such a huge range? Because not all links are equal.
           </p>
 
           <h3 className="text-2xl font-bold text-foreground mt-8 mb-4">The Industry Reality</h3>

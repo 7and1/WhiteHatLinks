@@ -63,7 +63,7 @@ const timeline = [
     year: '2023',
     title: 'Launch',
     description:
-      'WhiteHatLinks launched with a curated inventory of 200+ vetted sites. No marketing budget. Word spread through referrals from happy customers who saw real results.',
+      'We launched with a curated inventory of 200+ vetted sites. No marketing budget. Word spread through referrals from happy customers who saw real results.',
   },
   {
     year: '2024',
@@ -72,7 +72,7 @@ const timeline = [
       '500+ campaigns delivered. Zero penalties. Agency partnerships formed. Inventory expanded to 1000+ sites across 20+ niches. Team grew from 2 to 8 people.',
   },
   {
-    year: '2025',
+    year: '2026',
     title: 'The Future',
     description:
       'Expanding into new markets. Building AI-powered quality checks. Same mission: make safe link acquisition predictable. No shortcuts. No compromises.',
@@ -99,9 +99,9 @@ export default function AboutPage() {
       <div className="container py-16">
         {/* Hero */}
         <div className="max-w-3xl mb-20">
-          <p className="text-sm font-semibold text-primary uppercase tracking-wide">About WhiteHatLinks</p>
+          <p className="text-sm font-semibold text-primary uppercase tracking-wide">About Us</p>
           <h1 className="text-4xl font-bold tracking-tight text-foreground mt-2">
-            About WhiteHatLinks
+            Expert Link Building Team with 15+ Years Experience
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
             The link building industry is broken. We built WhiteHatLinks to fix it.
@@ -113,7 +113,7 @@ export default function AboutPage() {
             We saw this problem firsthand. We ran our own SaaS companies and e-commerce stores. We needed backlinks to rank. We tried every service out there. Rejected thousands of spammy placements. Lost money on penalties.
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
-            So we built our own solution. WhiteHatLinks only works with real websites. Real traffic. Real editorial control. No PBNs. No fake metrics. No BS.
+            So we built our own solution. We only work with real websites. Real traffic. Real editorial control. No PBNs. No fake metrics. No BS.
           </p>
           <p className="mt-4 text-lg font-semibold text-foreground">
             Our mission is simple: make safe link acquisition predictable.

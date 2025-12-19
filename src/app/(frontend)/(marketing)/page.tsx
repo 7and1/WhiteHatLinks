@@ -4,8 +4,9 @@ import { getInventory } from '@/lib/inventory-source'
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo'
 import { CheckCircle, Shield, TrendingUp, Users, Zap, Target } from 'lucide-react'
 
-// Force dynamic rendering - needs live D1 data
-export const dynamic = 'force-dynamic'
+// ISR: Revalidate every 5 minutes (300 seconds)
+// Homepage shows fresh inventory but can be cached briefly
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Buy Quality Backlinks | Premium White Hat Link Building Service',
@@ -71,7 +72,7 @@ const homepageFaqs = [
   {
     question: 'What is WhiteHatLinks?',
     answer:
-      'WhiteHatLinks is a premium backlink acquisition service built by SEO experts with 10+ years of experience. We provide vetted, high-authority guest posts and link insertions on real websites with genuine traffic. No spam networks, no risky shortcuts.',
+      'We\'re a premium backlink acquisition service built by SEO experts with 10+ years of experience. We provide vetted, high-authority guest posts and link insertions on real websites with genuine traffic. No spam networks, no risky shortcuts.',
   },
   {
     question: 'How do you vet the sites?',
@@ -105,12 +106,12 @@ export default async function HomePage() {
 
       <div className="container py-20 flex flex-col gap-24">
         {/* Hero Section */}
-        <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-center">
+        <section aria-labelledby="hero-heading" className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-center">
           <div className="space-y-6">
             <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold text-primary">
               Built by SEO Experts with 10+ Years Experience
             </span>
-            <h1 className="text-4xl font-bold tracking-tight lg:text-5xl text-foreground">
+            <h1 id="hero-heading" className="text-4xl font-bold tracking-tight lg:text-5xl text-foreground">
               Buy Quality Backlinks That Actually Work
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl">
@@ -142,7 +143,7 @@ export default async function HomePage() {
           </div>
 
           {/* Fresh Inventory Card */}
-          <div className="rounded-xl border bg-white p-6 shadow-sm">
+          <div className="rounded-xl border bg-white p-6 shadow-sm" role="complementary">
             <div className="mb-4 flex items-center justify-between">
               <div className="font-semibold text-foreground">Fresh inventory</div>
               <Link className="text-sm text-primary hover:underline" href="/inventory">
@@ -237,10 +238,10 @@ export default async function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section>
+        <section aria-labelledby="features-heading">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Why SEO Teams Choose WhiteHatLinks
+            <h2 id="features-heading" className="text-3xl font-bold text-foreground mb-4">
+              Why SEO Teams Choose Us
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               We built the link building service we wished existed: transparent, safe, and effective.
@@ -249,11 +250,11 @@ export default async function HomePage() {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {features.map((feature) => (
-              <div key={feature.title} className="rounded-xl border bg-white p-6 shadow-sm">
-                <feature.icon className="h-10 w-10 text-primary mb-4" />
+              <article key={feature.title} className="rounded-xl border bg-white p-6 shadow-sm">
+                <feature.icon className="h-10 w-10 text-primary mb-4" aria-hidden="true" />
                 <h3 className="text-lg font-semibold text-foreground">{feature.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{feature.description}</p>
-              </div>
+              </article>
             ))}
           </div>
         </section>
@@ -353,7 +354,7 @@ export default async function HomePage() {
           </h2>
           <div className="space-y-4 text-muted-foreground">
             <p>
-              The link building game is changing. In 2025, 73% of marketers believe backlinks
+              The link building game is changing. In 2026, 73% of marketers believe backlinks
               influence AI search results like ChatGPT. Google is getting smarter. Spam doesn't work
               anymore.
             </p>
@@ -464,10 +465,10 @@ export default async function HomePage() {
         </section>
 
         {/* Industries Section */}
-        <section>
+        <section aria-labelledby="industries-heading">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Industries we serve</h2>
-            <p className="text-muted-foreground">Niche-specific inventory across verticals</p>
+            <h2 id="industries-heading" className="text-3xl font-bold text-foreground mb-4">Industries We Serve</h2>
+            <p className="text-muted-foreground">We have niche-specific inventory across all major verticals</p>
           </div>
           <div className="grid gap-4 md:grid-cols-5">
             {['SaaS', 'Finance', 'Crypto', 'Health', 'Tech'].map((industry) => (

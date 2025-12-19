@@ -3,10 +3,14 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getAllIndustries } from '@/data/industries'
 
-// Force dynamic rendering - sitemap needs live data from D1
+// Cache for 1 hour to reduce D1 load
+export const revalidate = 3600
 export const dynamic = 'force-dynamic'
 
 const base = 'https://whitehatlink.org'
+
+// Deployment/build timestamp for static pages
+const buildTime = new Date('2025-01-15')
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayload({ config: configPromise })
@@ -21,84 +25,101 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Get all industries from static data
   const industries = getAllIndustries()
 
+  // Get current date for inventory (updates daily)
+  const now = new Date()
+
   // Static routes with priority and changeFrequency
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${base}/`,
-      lastModified: new Date(),
+      lastModified: now, // Home page changes daily with inventory
       changeFrequency: 'daily',
       priority: 1.0,
     },
     {
       url: `${base}/inventory`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
+      lastModified: now, // Inventory updates daily
+      changeFrequency: 'hourly',
+      priority: 0.95,
     },
     {
       url: `${base}/services`,
-      lastModified: new Date(),
+      lastModified: buildTime,
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.85,
     },
     {
       url: `${base}/pricing`,
-      lastModified: new Date(),
+      lastModified: buildTime,
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.85,
     },
     {
       url: `${base}/blog`,
-      lastModified: new Date(),
+      lastModified: posts.length > 0 && posts[0].updatedAt
+        ? new Date(posts[0].updatedAt)
+        : now,
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
       url: `${base}/about`,
-      lastModified: new Date(),
+      lastModified: buildTime,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: `${base}/contact`,
-      lastModified: new Date(),
+      lastModified: buildTime,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${base}/faq`,
-      lastModified: new Date(),
+      lastModified: buildTime,
       changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 0.65,
     },
     {
       url: `${base}/privacy`,
-      lastModified: new Date(),
+      lastModified: buildTime,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${base}/terms`,
-      lastModified: new Date(),
+      lastModified: buildTime,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
   ]
 
-  // Blog post routes
-  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${base}/blog/${post.slug}`,
-    lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }))
+  // Blog post routes with dynamic priority based on recency
+  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => {
+    const postDate = post.publishedDate ? new Date(post.publishedDate) : new Date()
+    const daysSincePublish = Math.floor((now.getTime() - postDate.getTime()) / (1000 * 60 * 60 * 24))
 
-  // Industry routes
+    // Fresh posts (< 30 days) get higher priority
+    let priority = 0.75
+    if (daysSincePublish < 7) priority = 0.85
+    else if (daysSincePublish < 30) priority = 0.8
+    else if (daysSincePublish < 90) priority = 0.75
+    else priority = 0.65
+
+    return {
+      url: `${base}/blog/${post.slug}`,
+      lastModified: post.updatedAt ? new Date(post.updatedAt) : postDate,
+      changeFrequency: daysSincePublish < 30 ? 'weekly' as const : 'monthly' as const,
+      priority,
+    }
+  })
+
+  // Industry routes - high priority as they're conversion-focused
   const industryRoutes: MetadataRoute.Sitemap = industries.map((industry) => ({
     url: `${base}/industries/${industry.slug}`,
-    lastModified: new Date(),
+    lastModified: buildTime,
     changeFrequency: 'weekly' as const,
-    priority: 0.8,
+    priority: 0.82, // Between pricing and blog
   }))
 
   return [...staticRoutes, ...postRoutes, ...industryRoutes]

@@ -32,44 +32,50 @@ export function InventoryPagination({ currentPage, totalPages, onPageChange }: P
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        Previous
-      </Button>
+    <nav role="navigation" aria-label="Pagination navigation">
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          aria-label="Go to previous page"
+        >
+          Previous
+        </Button>
 
-      <div className="flex flex-wrap items-center gap-1">
-        {getPageNumbers().map((page, index) =>
-          page === '...' ? (
-            <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">
-              ...
-            </span>
-          ) : (
-            <Button
-              key={page}
-              variant={currentPage === page ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => onPageChange(page as number)}
-              className="min-w-[40px]"
-            >
-              {page}
-            </Button>
-          )
-        )}
+        <div className="flex flex-wrap items-center gap-1" role="list">
+          {getPageNumbers().map((page, index) =>
+            page === '...' ? (
+              <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground" aria-hidden="true">
+                ...
+              </span>
+            ) : (
+              <Button
+                key={page}
+                variant={currentPage === page ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => onPageChange(page as number)}
+                className="min-w-[40px]"
+                aria-label={`Go to page ${page}`}
+                aria-current={currentPage === page ? 'page' : undefined}
+              >
+                {page}
+              </Button>
+            )
+          )}
+        </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          aria-label="Go to next page"
+        >
+          Next
+        </Button>
       </div>
-
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        Next
-      </Button>
-    </div>
+    </nav>
   )
 }

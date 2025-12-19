@@ -1,5 +1,12 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import {
+  getInventoryFromD1,
+  getInventoryCountFromD1,
+  getInventoryNichesFromD1,
+  getInventoryRegionsFromD1,
+} from './inventory-source-d1'
+import { transformRecord, type RawInventoryRecord } from './inventory-source-json-utils'
 
 export interface InventoryItem {
   id: string
@@ -33,149 +40,12 @@ const DEFAULT_JSON_PATH =
   process.env.INVENTORY_JSON_PATH ||
   '/Volumes/SSD/dev/links/dobacklinks/scraper/active-sites-incremental.json'
 
+// In-memory cache for inventory data
+// Reduces database/file system access significantly
+// In-memory cache for inventory data
 let inventoryCache: InventoryItem[] | null = null
 let cacheTimestamp: number = 0
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
-
-function parseNumber(input: unknown): number | null {
-  if (input === null || input === undefined) return null
-  if (typeof input === 'number' && !Number.isNaN(input)) return input
-  if (typeof input !== 'string') return null
-  const cleaned = input.replace(/[^0-9.\-]/g, '')
-  const value = Number(cleaned)
-  return Number.isFinite(value) ? value : null
-}
-
-function inferNiche(domain: string, sampleUrls?: string[]): string {
-  const d = domain.toLowerCase()
-
-  // High priority niches (from domain)
-  if (/(crypto|blockchain|bitcoin|defi|web3|nft|coin)/.test(d)) return 'Crypto'
-  if (/(financ|bank|loan|credit|invest|fund|stock|forex|money)/.test(d)) return 'Finance'
-  if (/(health|medic|clinic|wellness|fitness|care|pharma|hospital|doctor)/.test(d)) return 'Health'
-  if (/(saas|software.*service)/.test(d)) return 'SaaS'
-  if (/(tech|ai\b|data|cloud|dev|code|app|software|digital|cyber)/.test(d)) return 'Tech'
-  if (/(marketing|seo|advertis|brand|media|agency)/.test(d)) return 'Marketing'
-  if (/(travel|tour|hotel|flight|vacation|trip)/.test(d)) return 'Travel'
-  if (/(fashion|style|beauty|cosmetic|makeup)/.test(d)) return 'Fashion'
-  if (/(food|recipe|restaurant|cook|cuisine|dining)/.test(d)) return 'Food'
-  if (/(sport|athlet|fitness|gym|yoga|soccer|football|basketball)/.test(d)) return 'Sports'
-  if (/(edu|learn|course|academ|tutor|school|university)/.test(d)) return 'Education'
-  if (/(game|gaming|esport|play|gamer)/.test(d)) return 'Gaming'
-  if (/(legal|law|lawyer|attorney|court|justice)/.test(d)) return 'Legal'
-  if (/(real.*estate|property|realty|housing|home)/.test(d)) return 'Real Estate'
-  if (/(business|entrepreneur|startup|company|enterprise)/.test(d)) return 'Business'
-
-  // Secondary analysis from sample URLs
-  if (sampleUrls && sampleUrls.length > 0) {
-    const urlText = sampleUrls.join(' ').toLowerCase()
-    if (/(crypto|blockchain|bitcoin)/.test(urlText)) return 'Crypto'
-    if (/(saas|software.*as.*service)/.test(urlText)) return 'SaaS'
-    if (/(health|medical|wellness)/.test(urlText)) return 'Health'
-    if (/(marketing|seo|digital.*marketing)/.test(urlText)) return 'Marketing'
-    if (/(finance|invest|trading)/.test(urlText)) return 'Finance'
-  }
-
-  // Generic domains (news/blog/media)
-  if (/(news|blog|media|magazine|journal|post|bulletin|press)/.test(d)) return 'News & Media'
-
-  return 'General'
-}
-
-function normalizeCountry(country?: string | null): string {
-  if (!country) return 'Global'
-  if (country.includes('🇺🇸') || /US|United States/i.test(country)) return 'USA'
-  if (country.includes('🇬🇧') || /UK|United Kingdom/i.test(country)) return 'UK'
-  if (country.includes('🇨🇦') || /Canada/i.test(country)) return 'Canada'
-  if (country.includes('🇦🇺') || /Australia/i.test(country)) return 'Australia'
-  if (country.includes('🇩🇪') || /Germany|DE/i.test(country)) return 'Germany'
-  if (country.includes('🇫🇷') || /France|FR/i.test(country)) return 'France'
-  if (country.includes('🇮🇳') || /India|IN/i.test(country)) return 'India'
-  return country.replace(/[^A-Za-z\s]/g, '').trim() || 'Global'
-}
-
-function transformRecord(raw: any): InventoryItem | null {
-  if (!raw || typeof raw !== 'object' || raw.success === false) return null
-  const data = raw.data || {}
-
-  const domain: string = raw.domain || raw.site || raw.url
-  if (!domain) return null
-
-  // Parse DR (priority: Ahrefs DR > Moz DA)
-  const ahrefsDR = parseNumber(data.ahrefsDR)
-  const mozDA = parseNumber(data.mozDA)
-  const dr = ahrefsDR ?? mozDA
-  const semrushAS = parseNumber(data.semrushAS)
-
-  // Traffic (keep all sources, main traffic uses max value)
-  const trafficAhrefs = parseNumber(data.ahrefsOrganicTraffic)
-  const trafficSimilarweb = parseNumber(data.similarwebTraffic)
-  const trafficSemrush = parseNumber(data.semrushTotalTraffic)
-  const traffic = Math.max(trafficAhrefs ?? 0, trafficSimilarweb ?? 0, trafficSemrush ?? 0)
-
-  // Referring domains
-  const referringDomains = parseNumber(data.referralDomains)
-
-  // Price (keep all prices, main price uses contentPlacement)
-  const priceContentPlacement = parseNumber(data.contentPlacementPrice)
-  const priceWritingPlacement = parseNumber(data.writingPlacementPrice)
-  const priceSpecialTopic = parseNumber(data.specialTopicPrice)
-  const basePrice = priceContentPlacement ?? priceWritingPlacement ?? priceSpecialTopic
-
-  if (!dr || !basePrice) return null
-  const price = Math.round(basePrice * 2)
-
-  // Spam Score (1% → 1)
-  const spamScoreStr = data.spamScore?.replace(/[^0-9]/g, '') || '0'
-  const spamScore = parseInt(spamScoreStr) || 0
-
-  // Google News
-  const googleNews = /yes/i.test(data.googleNews || '')
-
-  // Completion Rate & Avg Lifetime
-  const completionRate = parseNumber(data.completionRate?.replace?.('%', ''))
-  const avgLifetime = parseNumber(data.avgLifetimeOfLinks?.replace?.('%', ''))
-
-  // Link Type
-  let linkType: 'Dofollow' | 'Nofollow' | 'Unknown' = 'Unknown'
-  if (/dofollow/i.test(data.linkAttributionType || '')) linkType = 'Dofollow'
-  else if (/nofollow/i.test(data.linkAttributionType || '')) linkType = 'Nofollow'
-
-  // Content Size ("500 words" → 500)
-  const contentSizeMatch = data.requiredContentSize?.match?.(/\d+/)
-  const contentSize = contentSizeMatch ? parseInt(contentSizeMatch[0]) : undefined
-
-  // TAT (turnaround time)
-  const tat = data.tat?.split?.('\n')?.[0] || data.tat
-
-  return {
-    id: String(raw.siteId || domain),
-    niche: inferNiche(domain, data.sampleUrls),
-    dr,
-    traffic,
-    price,
-    region: normalizeCountry(data.country),
-    domain,
-    status: 'Available',
-    createdAt: raw.timestamp,
-    // New fields
-    spamScore,
-    googleNews,
-    mozDA: mozDA ?? undefined,
-    semrushAS: semrushAS ?? undefined,
-    referringDomains: referringDomains ?? undefined,
-    completionRate: completionRate ?? undefined,
-    avgLifetime: avgLifetime ?? undefined,
-    tat,
-    linkType,
-    language: data.language || 'English',
-    contentSize,
-    sampleUrls: data.sampleUrls?.slice?.(0, 5),
-    trafficAhrefs: trafficAhrefs ?? undefined,
-    trafficSimilarweb: trafficSimilarweb ?? undefined,
-    trafficSemrush: trafficSemrush ?? undefined,
-  }
-}
+const CACHE_TTL = 5 * 60 * 1000 // 5 minutes - balances freshness and performance
 
 async function loadFromJson(): Promise<InventoryItem[] | null> {
   const now = Date.now()
@@ -190,7 +60,10 @@ async function loadFromJson(): Promise<InventoryItem[] | null> {
     const fs = await import('fs/promises')
     const file = await fs.readFile(DEFAULT_JSON_PATH, 'utf-8')
     const parsed = JSON.parse(file)
-    const mapped = (parsed as any[])?.map(transformRecord).filter(Boolean) as InventoryItem[]
+    const rawRecords = Array.isArray(parsed) ? parsed : []
+    const mapped = rawRecords
+      .map((record: unknown, index: number) => transformRecord(record as RawInventoryRecord, index))
+      .filter((item): item is InventoryItem => item !== null)
     inventoryCache = mapped.sort((a, b) => b.dr - a.dr)
     cacheTimestamp = now
     return inventoryCache
@@ -208,16 +81,16 @@ async function loadFromPayload(): Promise<InventoryItem[]> {
     where: { status: { equals: 'Available' } },
     sort: '-dr',
   })
-  return docs.map((doc: any) => ({
+  return docs.map((doc) => ({
     id: String(doc.id),
-    niche: doc.niche,
-    dr: doc.dr,
-    traffic: doc.traffic,
-    price: doc.price,
-    region: doc.region,
-    domain: doc.domain,
-    status: doc.status,
-    createdAt: doc.createdAt,
+    niche: String(doc.niche),
+    dr: Number(doc.dr),
+    traffic: Number(doc.traffic),
+    price: Number(doc.price),
+    region: doc.region ? String(doc.region) : undefined,
+    domain: doc.domain ? String(doc.domain) : undefined,
+    status: String(doc.status),
+    createdAt: doc.createdAt ? String(doc.createdAt) : undefined,
     // Default values for new fields when loading from Payload
     spamScore: 0,
     googleNews: false,
@@ -241,7 +114,33 @@ export interface InventoryQuery {
   offset?: number
 }
 
-export async function getInventory(query: InventoryQuery = {}): Promise<InventoryItem[]> {
+/**
+ * Get inventory from D1 if available
+ */
+async function loadFromD1(query: InventoryQuery, env?: { D1?: D1Database }): Promise<InventoryItem[] | null> {
+  if (!env?.D1) {
+    return null
+  }
+
+  try {
+    return await getInventoryFromD1(env.D1, query)
+  } catch (error) {
+    console.error('Failed to load inventory from D1:', error)
+    return null
+  }
+}
+
+export async function getInventory(
+  query: InventoryQuery = {},
+  env?: { D1?: D1Database }
+): Promise<InventoryItem[]> {
+  // Try D1 first (production), then JSON (local dev), finally Payload (fallback)
+  const d1Results = await loadFromD1(query, env)
+  if (d1Results) {
+    return d1Results
+  }
+
+  // Fallback to JSON/Payload with client-side filtering
   const source = (await loadFromJson()) ?? (await loadFromPayload())
 
   const niche = query.niche?.toLowerCase()
@@ -290,14 +189,38 @@ export async function getInventory(query: InventoryQuery = {}): Promise<Inventor
 }
 
 export async function getInventoryCount(
-  query: Omit<InventoryQuery, 'limit' | 'offset'> = {}
+  query: Omit<InventoryQuery, 'limit' | 'offset'> = {},
+  env?: { D1?: D1Database }
 ): Promise<number> {
-  const results = await getInventory({ ...query, limit: undefined, offset: undefined })
+  // Try D1 first for efficient counting
+  if (env?.D1) {
+    try {
+      return await getInventoryCountFromD1(env.D1, query)
+    } catch (error) {
+      console.error('Failed to get count from D1:', error)
+    }
+  }
+
+  // Fallback to loading all and counting
+  const results = await getInventory({ ...query, limit: undefined, offset: undefined }, env)
   return results.length
 }
 
-export async function getInventoryNiches(limit = 20): Promise<string[]> {
-  const data = await getInventory({ limit: undefined })
+export async function getInventoryNiches(
+  limit = 20,
+  env?: { D1?: D1Database }
+): Promise<string[]> {
+  // Try D1 first for efficient grouping
+  if (env?.D1) {
+    try {
+      return await getInventoryNichesFromD1(env.D1, limit)
+    } catch (error) {
+      console.error('Failed to get niches from D1:', error)
+    }
+  }
+
+  // Fallback to loading all and grouping
+  const data = await getInventory({ limit: undefined }, env)
   const nicheCounts = new Map<string, number>()
   data.forEach((item) => {
     nicheCounts.set(item.niche, (nicheCounts.get(item.niche) || 0) + 1)
@@ -309,8 +232,18 @@ export async function getInventoryNiches(limit = 20): Promise<string[]> {
   return sorted.slice(0, limit)
 }
 
-export async function getInventoryRegions(): Promise<string[]> {
-  const data = await getInventory({ limit: undefined })
+export async function getInventoryRegions(env?: { D1?: D1Database }): Promise<string[]> {
+  // Try D1 first for efficient distinct query
+  if (env?.D1) {
+    try {
+      return await getInventoryRegionsFromD1(env.D1)
+    } catch (error) {
+      console.error('Failed to get regions from D1:', error)
+    }
+  }
+
+  // Fallback to loading all and filtering
+  const data = await getInventory({ limit: undefined }, env)
   const regions = Array.from(new Set(data.map((i) => i.region).filter(Boolean))) as string[]
   return regions.sort()
 }

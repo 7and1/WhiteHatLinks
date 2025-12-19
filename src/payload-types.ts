@@ -169,7 +169,20 @@ export interface Post {
     [k: string]: unknown;
   } | null;
   publishedDate?: string | null;
-  related_niche?: ('SaaS' | 'Finance' | 'Crypto' | 'Health') | null;
+  tags?:
+    | (
+        | 'Guest Posting'
+        | 'Niche Edits'
+        | 'Content Strategy'
+        | 'Outreach Templates'
+        | 'Link Quality Analysis'
+        | 'SEO Case Studies'
+        | 'Domain Metrics'
+        | 'Penalty Recovery'
+        | 'Local SEO Links'
+        | 'E-commerce Link Building'
+      )[]
+    | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
   updatedAt: string;
@@ -344,7 +357,7 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   content?: T;
   publishedDate?: T;
-  related_niche?: T;
+  tags?: T;
   metaTitle?: T;
   metaDescription?: T;
   updatedAt?: T;

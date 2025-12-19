@@ -1,9 +1,14 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
-import { Toaster } from 'sonner'
+import dynamic from 'next/dynamic'
 import './globals.css'
-import { OrganizationSchema, WebSiteSchema } from '@/components/seo'
+import { OrganizationSchema, WebSiteSchema, AggregateRatingSchema } from '@/components/seo'
+import { ClientErrorBoundary } from '@/components/ClientErrorBoundary'
+import { CloudflareAnalytics } from '@/components/CloudflareAnalytics'
+
+// Dynamic import for Toaster - only load when needed (user interactions)
+const Toaster = dynamic(() => import('sonner').then(mod => ({ default: mod.Toaster })))
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,7 +29,7 @@ export const metadata: Metadata = {
     template: '%s | WhiteHatLinks',
   },
   description:
-    'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam. Manual outreach, real editorial placements.',
+    'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam. Manual outreach, real editorial placements. 500+ campaigns delivered safely with 90% acceptance rate.',
   keywords: [
     'backlinks',
     'guest posts',
@@ -34,10 +39,16 @@ export const metadata: Metadata = {
     'digital PR',
     'high DR backlinks',
     'white hat SEO',
+    'editorial backlinks',
+    'quality backlinks',
+    'buy backlinks',
+    'link building service',
   ],
-  authors: [{ name: 'WhiteHatLinks' }],
+  authors: [{ name: 'WhiteHatLinks', url: 'https://whitehatlink.org' }],
   creator: 'WhiteHatLinks',
   publisher: 'WhiteHatLinks',
+  category: 'SEO Services',
+  classification: 'Business',
   formatDetection: {
     email: false,
     address: false,
@@ -50,45 +61,75 @@ export const metadata: Metadata = {
     siteName: 'WhiteHatLinks',
     title: 'WhiteHatLinks | Premium Backlinks Without Spam',
     description:
-      'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam.',
+      'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam. 500+ campaigns delivered safely with 90% acceptance rate.',
     images: [
       {
         url: '/og',
         width: 1200,
         height: 630,
-        alt: 'WhiteHatLinks - Premium Backlink Acquisition',
+        alt: 'WhiteHatLinks - Premium Backlink Acquisition Service with Transparent Metrics',
+        type: 'image/png',
       },
     ],
+    countryName: 'United States',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'WhiteHatLinks | Premium Backlinks Without Spam',
     description:
-      'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam.',
+      'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam. 500+ campaigns delivered safely.',
     images: ['/og'],
+    creator: '@whitehatlinks',
+    site: '@whitehatlinks',
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: 'your-google-site-verification-code',
+    yandex: 'your-yandex-verification-code',
+    other: {
+      'msvalidate.01': 'your-bing-verification-code',
+    },
+  },
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
-      { url: '/favicon.ico' },
+      { url: '/favicon.ico', sizes: '32x32' },
     ],
     shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/favicon.svg',
+        color: '#3b5bdb',
+      },
+    ],
   },
   manifest: '/site.webmanifest',
   alternates: {
     canonical: 'https://whitehatlink.org',
+    types: {
+      'application/rss+xml': 'https://whitehatlink.org/rss.xml',
+    },
+  },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+    'apple-mobile-web-app-title': 'WhiteHatLinks',
   },
 }
 
@@ -104,10 +145,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
+        {/* Font optimization */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Resource hints for third-party services */}
+        <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
+        {process.env.NEXT_PUBLIC_SENTRY_DSN && (
+          <link rel="dns-prefetch" href="https://o0.ingest.sentry.io" />
+        )}
+
         <OrganizationSchema />
         <WebSiteSchema />
+        <AggregateRatingSchema />
+        <CloudflareAnalytics />
       </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <Toaster position="top-right" richColors closeButton />
@@ -123,9 +174,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link
               href="/"
               className="flex items-center gap-2 font-bold text-lg tracking-tight text-foreground hover:text-primary transition-colors"
+              aria-label="WhiteHatLinks home"
             >
-              <img src="/favicon.svg" alt="" width={28} height={28} className="shrink-0" />
-              WhiteHatLinks
+              <img
+                src="/favicon.svg"
+                alt="WhiteHatLinks logo"
+                width={28}
+                height={28}
+                className="shrink-0"
+                loading="eager"
+                fetchPriority="high"
+              />
+              <span>WhiteHatLinks</span>
             </Link>
             <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm">
               {navLinks.map((link) => (
@@ -148,7 +208,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
 
         <main id="main-content" className="pb-16">
-          {children}
+          <ClientErrorBoundary>{children}</ClientErrorBoundary>
         </main>
 
         <footer className="border-t bg-secondary/50 py-12">
@@ -226,7 +286,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
 
             <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-              <p>&copy; 2025 WhiteHatLinks. All rights reserved.</p>
+              <p>&copy; 2026 WhiteHatLinks. All rights reserved.</p>
               <div className="flex gap-6">
                 <Link href="/terms" className="hover:text-primary transition-colors">
                   Terms of Service

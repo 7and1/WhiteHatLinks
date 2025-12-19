@@ -4,23 +4,44 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from 'sonner'
+import { Loader2 } from 'lucide-react'
+import type { InventoryItem } from '@/lib/inventory-source'
 
-export function InquiryDialog({ item }: { item: any }) {
+export function InquiryDialog({ item }: { item: InventoryItem }) {
   const [open, setOpen] = useState(false)
-  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.target as HTMLFormElement)
+    setIsSubmitting(true)
+
+    const formData = new FormData(e.currentTarget)
     formData.append('itemId', item.id)
+
     try {
-      await fetch('/api/inquire', { method: 'POST', body: formData })
-      toast({ title: 'Request received', description: `We will send the domain and invoice for ${item.niche}.` })
+      const response = await fetch('/api/inquire', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit request')
+      }
+
+      toast.success('Request received!', {
+        description: `We will send the domain and invoice for ${item.niche}.`
+      })
+
+      setOpen(false)
+      e.currentTarget.reset()
     } catch (err) {
-      toast({ title: 'Failed to send', description: 'Please email hello@whitehatlink.org' })
+      toast.error('Failed to send request', {
+        description: 'Please try again or email hello@whitehatlink.org'
+      })
+    } finally {
+      setIsSubmitting(false)
     }
-    setOpen(false)
   }
 
   return (
@@ -35,14 +56,36 @@ export function InquiryDialog({ item }: { item: any }) {
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Work email</Label>
-            <Input id="email" name="email" type="email" required placeholder="name@company.com" />
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="name@company.com"
+              disabled={isSubmitting}
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="url">Target URL</Label>
-            <Input id="url" name="url" required placeholder="https://your-site.com/pricing" />
+            <Input
+              id="url"
+              name="url"
+              required
+              placeholder="https://your-site.com/pricing"
+              disabled={isSubmitting}
+            />
           </div>
           <DialogFooter>
-            <Button type="submit">Submit request</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                'Submit request'
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -1,4 +1,5 @@
-export { ProductSchema } from './Schema'
+export { ProductSchema, AggregateRatingSchema, OfferSchema } from './Schema'
+export type { InventoryItem } from './Schema'
 export { OrganizationSchema } from './OrganizationSchema'
 export { WebSiteSchema } from './WebSiteSchema'
 export { BreadcrumbSchema } from './BreadcrumbSchema'

@@ -74,11 +74,13 @@ export function InventoryFilters({ onUpdate, availableNiches, availableRegions }
       {/* Main filters row */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Niche</label>
+          <label htmlFor="filter-niche" className="text-xs font-medium text-muted-foreground mb-1.5 block">Niche</label>
           <select
-            className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            id="filter-niche"
+            className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             value={filters.niche}
             onChange={(e) => setFilters({ ...filters, niche: e.target.value })}
+            aria-label="Filter by niche category"
           >
             <option value="">All Niches</option>
             {availableNiches.map((n) => (
@@ -90,34 +92,40 @@ export function InventoryFilters({ onUpdate, availableNiches, availableRegions }
         </div>
 
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Min DR</label>
+          <label htmlFor="filter-min-dr" className="text-xs font-medium text-muted-foreground mb-1.5 block">Min DR</label>
           <Input
+            id="filter-min-dr"
             type="number"
             placeholder="e.g. 50"
             min={0}
             max={100}
             value={filters.min_dr}
             onChange={(e) => setFilters({ ...filters, min_dr: e.target.value })}
+            aria-label="Minimum Domain Rating"
           />
         </div>
 
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Max Price ($)</label>
+          <label htmlFor="filter-max-price" className="text-xs font-medium text-muted-foreground mb-1.5 block">Max Price ($)</label>
           <Input
+            id="filter-max-price"
             type="number"
             placeholder="e.g. 300"
             min={0}
             value={filters.max_price}
             onChange={(e) => setFilters({ ...filters, max_price: e.target.value })}
+            aria-label="Maximum price in dollars"
           />
         </div>
 
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Sort By</label>
+          <label htmlFor="filter-sort" className="text-xs font-medium text-muted-foreground mb-1.5 block">Sort By</label>
           <select
-            className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            id="filter-sort"
+            className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             value={filters.sort}
             onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
+            aria-label="Sort results by"
           >
             <option value="dr">Domain Rating (High to Low)</option>
             <option value="traffic">Traffic (High to Low)</option>
@@ -132,7 +140,10 @@ export function InventoryFilters({ onUpdate, availableNiches, availableRegions }
         <button
           type="button"
           onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
-          className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-2"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1"
+          aria-expanded={isAdvancedOpen}
+          aria-controls="advanced-filters"
+          aria-label={isAdvancedOpen ? 'Hide advanced filters' : 'Show advanced filters'}
         >
           <span>Advanced Filters</span>
           {activeFilterCount > 0 && (
@@ -145,6 +156,7 @@ export function InventoryFilters({ onUpdate, availableNiches, availableRegions }
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
@@ -153,40 +165,46 @@ export function InventoryFilters({ onUpdate, availableNiches, availableRegions }
 
       {/* Advanced filters panel */}
       {isAdvancedOpen && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 pt-2 border-t">
+        <div id="advanced-filters" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 pt-2 border-t">
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+            <label htmlFor="filter-max-spam" className="text-xs font-medium text-muted-foreground mb-1.5 block">
               Max Spam Score (%)
             </label>
             <Input
+              id="filter-max-spam"
               type="number"
               placeholder="e.g. 5"
               min={0}
               max={100}
               value={filters.max_spam}
               onChange={(e) => setFilters({ ...filters, max_spam: e.target.value })}
+              aria-label="Maximum spam score percentage"
             />
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+            <label htmlFor="filter-min-traffic" className="text-xs font-medium text-muted-foreground mb-1.5 block">
               Min Traffic
             </label>
             <Input
+              id="filter-min-traffic"
               type="number"
               placeholder="e.g. 10000"
               min={0}
               value={filters.min_traffic}
               onChange={(e) => setFilters({ ...filters, min_traffic: e.target.value })}
+              aria-label="Minimum monthly traffic"
             />
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Link Type</label>
+            <label htmlFor="filter-link-type" className="text-xs font-medium text-muted-foreground mb-1.5 block">Link Type</label>
             <select
-              className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              id="filter-link-type"
+              className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               value={filters.link_type}
               onChange={(e) => setFilters({ ...filters, link_type: e.target.value })}
+              aria-label="Filter by link type"
             >
               <option value="">All Types</option>
               <option value="Dofollow">Dofollow</option>
@@ -195,11 +213,13 @@ export function InventoryFilters({ onUpdate, availableNiches, availableRegions }
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Region</label>
+            <label htmlFor="filter-region" className="text-xs font-medium text-muted-foreground mb-1.5 block">Region</label>
             <select
-              className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              id="filter-region"
+              className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               value={filters.region}
               onChange={(e) => setFilters({ ...filters, region: e.target.value })}
+              aria-label="Filter by geographic region"
             >
               <option value="">All Regions</option>
               {availableRegions.map((r) => (
@@ -211,12 +231,14 @@ export function InventoryFilters({ onUpdate, availableNiches, availableRegions }
           </div>
 
           <div className="flex items-end">
-            <label className="flex items-center gap-2 cursor-pointer h-9">
+            <label htmlFor="filter-google-news" className="flex items-center gap-2 cursor-pointer h-9">
               <input
+                id="filter-google-news"
                 type="checkbox"
-                className="w-4 h-4 rounded border-input accent-primary"
+                className="w-4 h-4 rounded border-input accent-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 checked={filters.google_news}
                 onChange={(e) => setFilters({ ...filters, google_news: e.target.checked })}
+                aria-label="Show only Google News approved sites"
               />
               <span className="text-sm">Google News Only</span>
             </label>

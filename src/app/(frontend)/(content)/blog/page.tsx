@@ -4,8 +4,9 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { BreadcrumbSchema } from '@/components/seo'
 
-// Force dynamic rendering - needs live D1 data
-export const dynamic = 'force-dynamic'
+// ISR: Revalidate every 1 hour (3600 seconds)
+// Blog list doesn't change frequently, can be cached longer
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Link Building Blog - Real Strategies, Case Studies & Expert Insights',
@@ -102,7 +103,7 @@ export default async function BlogListPage() {
           </div>
 
           {/* Topics Covered */}
-          <div className="mb-12">
+          <div className="mb-8">
             <h2 className="text-2xl font-bold text-foreground mb-6">Topics We Cover</h2>
             <div className="flex flex-wrap gap-3">
               <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">Guest Posting</span>
@@ -118,102 +119,22 @@ export default async function BlogListPage() {
             </div>
           </div>
 
-          {/* Expertise Section */}
-          <div className="mb-12 border-l-4 border-primary pl-6">
-            <h2 className="text-2xl font-bold text-foreground mb-4">Who Writes This</h2>
-            <p className="text-muted-foreground mb-4 leading-relaxed">
-              We're a team of SEO specialists who've been in the trenches for over a decade. We've built links for Fortune 500 companies, scrappy startups, and everything in between.
-            </p>
-            <p className="text-muted-foreground mb-4 leading-relaxed">
-              Our writers have managed million-dollar link building budgets. They've recovered sites from Google penalties. They've scaled campaigns from zero to thousands of quality backlinks.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              Every article here comes from real experience. Not from reading other blogs. From actually doing the work. Making the pitches. Building the relationships. Getting the results.
-            </p>
-          </div>
-
-          {/* Why Trust Us */}
-          <div className="mb-12 bg-primary/5 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-foreground mb-4">Why Trust Us</h2>
-            <ul className="space-y-4">
-              <li className="flex items-start">
-                <span className="text-primary font-bold mr-3 text-xl">•</span>
-                <div>
-                  <strong className="text-foreground">We Practice What We Preach:</strong>
-                  <span className="text-muted-foreground"> Every strategy here is tested on our own sites first. If it doesn't work for us, we won't recommend it to you.</span>
-                </div>
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary font-bold mr-3 text-xl">•</span>
-                <div>
-                  <strong className="text-foreground">Data-Driven Approach:</strong>
-                  <span className="text-muted-foreground"> We track everything. Rankings, traffic, conversions. Every recommendation is backed by real numbers, not gut feelings.</span>
-                </div>
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary font-bold mr-3 text-xl">•</span>
-                <div>
-                  <strong className="text-foreground">No BS Policy:</strong>
-                  <span className="text-muted-foreground"> If something doesn't work, we'll tell you. If we screwed up, we'll share it. Honesty matters more than looking perfect.</span>
-                </div>
-              </li>
-              <li className="flex items-start">
-                <span className="text-primary font-bold mr-3 text-xl">•</span>
-                <div>
-                  <strong className="text-foreground">Google Guidelines First:</strong>
-                  <span className="text-muted-foreground"> We only teach white-hat methods. Your site's reputation is too valuable to risk with sketchy tactics.</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          {/* How to Use This Blog */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-foreground mb-4">How to Use This Blog</h2>
-            <p className="text-muted-foreground mb-6 leading-relaxed">
-              Don't just read. Apply. Pick one article. Follow the steps. Track your results. Then come back for the next one.
-            </p>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white border rounded-lg p-6">
-                <div className="text-3xl font-bold text-primary mb-3">1</div>
-                <h3 className="font-semibold text-foreground mb-2">Start Simple</h3>
-                <p className="text-sm text-muted-foreground">
-                  New to link building? Read our beginner guides first. Build your foundation before trying advanced tactics.
-                </p>
-              </div>
-              <div className="bg-white border rounded-lg p-6">
-                <div className="text-3xl font-bold text-primary mb-3">2</div>
-                <h3 className="font-semibold text-foreground mb-2">Pick Your Niche</h3>
-                <p className="text-sm text-muted-foreground">
-                  Find articles tagged for your industry. What works for SaaS won't work for local plumbers. Context matters.
-                </p>
-              </div>
-              <div className="bg-white border rounded-lg p-6">
-                <div className="text-3xl font-bold text-primary mb-3">3</div>
-                <h3 className="font-semibold text-foreground mb-2">Take Action</h3>
-                <p className="text-sm text-muted-foreground">
-                  Reading won't build links. Implementation will. Use our templates, follow our process, get results.
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Latest Articles Header */}
-          <div className="border-t pt-12">
-            <h2 className="text-3xl font-bold text-foreground mb-2">Latest Articles</h2>
-            <p className="text-muted-foreground mb-8">
+          <div className="pt-2">
+            <div className="text-2xl font-bold text-foreground mb-2">Latest Articles</div>
+            <p className="text-muted-foreground">
               Fresh insights from our latest campaigns. Updated regularly with new strategies and case studies.
             </p>
           </div>
         </div>
 
         {docs.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
             {docs.map((post) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="group rounded-xl border bg-white p-6 shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
+                className="group h-full rounded-xl border bg-white p-6 shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
               >
                 <div className="text-sm text-muted-foreground">
                   {post.publishedDate
@@ -232,6 +153,18 @@ export default async function BlogListPage() {
                     {post.metaDescription}
                   </p>
                 )}
+                {post.tags?.length ? (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
                 <div className="mt-4 text-sm font-medium text-primary">
                   Read article →
                 </div>
@@ -239,7 +172,7 @@ export default async function BlogListPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-xl border bg-secondary/50 p-12 text-center">
+          <div className="mt-8 rounded-xl border bg-secondary/50 p-12 text-center">
             <h2 className="text-xl font-semibold text-foreground mb-2">Coming soon</h2>
             <p className="text-muted-foreground mb-6">
               We&apos;re working on our first articles. In the meantime, browse our inventory or get
@@ -261,6 +194,86 @@ export default async function BlogListPage() {
             </div>
           </div>
         )}
+
+        {/* Expertise Section */}
+        <div className="mt-16 mb-12 max-w-4xl border-l-4 border-primary pl-6">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Who Writes This</h2>
+          <p className="text-muted-foreground mb-4 leading-relaxed">
+            We're a team of SEO specialists who've been in the trenches for over a decade. We've built links for Fortune 500 companies, scrappy startups, and everything in between.
+          </p>
+          <p className="text-muted-foreground mb-4 leading-relaxed">
+            Our writers have managed million-dollar link building budgets. They've recovered sites from Google penalties. They've scaled campaigns from zero to thousands of quality backlinks.
+          </p>
+          <p className="text-muted-foreground leading-relaxed">
+            Every article here comes from real experience. Not from reading other blogs. From actually doing the work. Making the pitches. Building the relationships. Getting the results.
+          </p>
+        </div>
+
+        {/* Why Trust Us */}
+        <div className="mb-12 max-w-4xl bg-primary/5 rounded-xl p-8">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Why Trust Us</h2>
+          <ul className="space-y-4">
+            <li className="flex items-start">
+              <span className="text-primary font-bold mr-3 text-xl">•</span>
+              <div>
+                <strong className="text-foreground">We Practice What We Preach:</strong>
+                <span className="text-muted-foreground"> Every strategy here is tested on our own sites first. If it doesn't work for us, we won't recommend it to you.</span>
+              </div>
+            </li>
+            <li className="flex items-start">
+              <span className="text-primary font-bold mr-3 text-xl">•</span>
+              <div>
+                <strong className="text-foreground">Data-Driven Approach:</strong>
+                <span className="text-muted-foreground"> We track everything. Rankings, traffic, conversions. Every recommendation is backed by real numbers, not gut feelings.</span>
+              </div>
+            </li>
+            <li className="flex items-start">
+              <span className="text-primary font-bold mr-3 text-xl">•</span>
+              <div>
+                <strong className="text-foreground">No BS Policy:</strong>
+                <span className="text-muted-foreground"> If something doesn't work, we'll tell you. If we screwed up, we'll share it. Honesty matters more than looking perfect.</span>
+              </div>
+            </li>
+            <li className="flex items-start">
+              <span className="text-primary font-bold mr-3 text-xl">•</span>
+              <div>
+                <strong className="text-foreground">Google Guidelines First:</strong>
+                <span className="text-muted-foreground"> We only teach white-hat methods. Your site's reputation is too valuable to risk with sketchy tactics.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        {/* How to Use This Blog */}
+        <div className="max-w-4xl mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-4">How to Use This Blog</h2>
+          <p className="text-muted-foreground mb-6 leading-relaxed">
+            Don't just read. Apply. Pick one article. Follow the steps. Track your results. Then come back for the next one.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white border rounded-lg p-6">
+              <div className="text-3xl font-bold text-primary mb-3">1</div>
+              <h3 className="font-semibold text-foreground mb-2">Start Simple</h3>
+              <p className="text-sm text-muted-foreground">
+                New to link building? Read our beginner guides first. Build your foundation before trying advanced tactics.
+              </p>
+            </div>
+            <div className="bg-white border rounded-lg p-6">
+              <div className="text-3xl font-bold text-primary mb-3">2</div>
+              <h3 className="font-semibold text-foreground mb-2">Pick Your Niche</h3>
+              <p className="text-sm text-muted-foreground">
+                Find articles tagged for your industry. What works for SaaS won't work for local plumbers. Context matters.
+              </p>
+            </div>
+            <div className="bg-white border rounded-lg p-6">
+              <div className="text-3xl font-bold text-primary mb-3">3</div>
+              <h3 className="font-semibold text-foreground mb-2">Take Action</h3>
+              <p className="text-sm text-muted-foreground">
+                Reading won't build links. Implementation will. Use our templates, follow our process, get results.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   )

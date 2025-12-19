@@ -26,7 +26,7 @@ const faqCategories = [
       {
         question: 'What is WhiteHatLinks?',
         answer:
-          'We build backlinks the right way. No tricks. No spam. No fake websites. Here\'s what we do: We find real websites with real traffic. Sites people actually visit. Then we get your link placed on those sites through guest posts or link insertions. Every site is checked manually. We look at traffic numbers. We check spam scores. We read the content to make sure it\'s good. Why? Because bad links hurt you. Google is smart. It knows when you\'re gaming the system. We only work with legitimate publishers who care about their content. Think of us as your link building partner who actually gives a damn about quality. We\'ve been doing this since 2018. We\'ve placed over 50,000 links. And we sleep well at night because we do it right.',
+          'We\'re a link building service that does things the right way. No tricks. No spam. No fake websites. Here\'s what we do: We find real websites with real traffic. Sites people actually visit. Then we get your link placed on those sites through guest posts or link insertions. Every site is checked manually. We look at traffic numbers. We check spam scores. We read the content to make sure it\'s good. Why? Because bad links hurt you. Google is smart. It knows when you\'re gaming the system. We only work with legitimate publishers who care about their content. Think of us as your link building partner who actually gives a damn about quality. We\'ve been doing this since 2018. We\'ve placed over 50,000 links. And we sleep well at night because we do it right.',
       },
       {
         question: 'How do you source your inventory?',

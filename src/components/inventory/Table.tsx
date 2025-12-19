@@ -2,6 +2,7 @@
 
 import { useState, useMemo, Fragment } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { Badge } from '@/components/ui/badge'
 import {
   Table,
@@ -11,11 +12,34 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { InquiryDialog } from '@/app/(frontend)/(shop)/inventory/InquiryDialog'
-import { InventoryFilters } from './Filters'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { Skeleton } from '@/components/ui/skeleton'
 import { InventoryPagination } from './Pagination'
 import type { InventoryItem } from '@/lib/inventory-source'
 import { cn } from '@/lib/utils'
+
+// Dynamic import for InquiryDialog - only load when user clicks "Request Slot"
+const InquiryDialog = dynamic(
+  () => import('@/app/(frontend)/(shop)/inventory/InquiryDialog').then(mod => ({ default: mod.InquiryDialog })),
+  {
+    loading: () => <LoadingSpinner size="sm" />,
+  }
+)
+
+// Dynamic import for InventoryFilters - filters are interactive and can be lazy loaded
+const InventoryFilters = dynamic(() => import('./Filters').then(mod => ({ default: mod.InventoryFilters })), {
+  loading: () => (
+    <div className="space-y-4 p-4 rounded-lg border bg-card">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+      </div>
+    </div>
+  ),
+  ssr: true,
+})
 
 const ITEMS_PER_PAGE = 20
 
@@ -89,13 +113,15 @@ export function InventoryTable({
           <Table>
             <TableHeader>
               <TableRow className="border-t-0">
-                <TableHead className="min-w-[180px]">Site & Niche</TableHead>
-                <TableHead className="min-w-[120px]">DR / DA</TableHead>
-                <TableHead className="min-w-[100px]">Traffic</TableHead>
-                <TableHead className="min-w-[140px]">Quality</TableHead>
-                <TableHead className="min-w-[80px]">Region</TableHead>
-                <TableHead className="min-w-[80px]">Price</TableHead>
-                <TableHead className="text-right min-w-[100px]"></TableHead>
+                <TableHead className="min-w-[180px]" scope="col">Site & Niche</TableHead>
+                <TableHead className="min-w-[120px]" scope="col">DR / DA</TableHead>
+                <TableHead className="min-w-[100px]" scope="col">Traffic</TableHead>
+                <TableHead className="min-w-[140px]" scope="col">Quality</TableHead>
+                <TableHead className="min-w-[80px]" scope="col">Region</TableHead>
+                <TableHead className="min-w-[80px]" scope="col">Price</TableHead>
+                <TableHead className="text-right min-w-[100px]" scope="col">
+                  <span className="sr-only">Actions</span>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -107,6 +133,16 @@ export function InventoryTable({
                       expandedRow === item.id && 'bg-muted/30'
                     )}
                     onClick={() => toggleRow(item.id)}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        toggleRow(item.id)
+                      }
+                    }}
+                    role="button"
+                    aria-expanded={expandedRow === item.id}
+                    aria-label={`${item.domain} - DR ${item.dr} - ${item.niche} - $${item.price}. Click to view details.`}
                   >
                     {/* Site & Niche */}
                     <TableCell>
@@ -197,7 +233,7 @@ export function InventoryTable({
                   {/* Expanded row details */}
                   {expandedRow === item.id && (
                     <TableRow>
-                      <TableCell colSpan={7} className="bg-muted/20 p-0">
+                      <TableCell colSpan={7} className="bg-muted/20 p-0" role="region" aria-label="Detailed metrics and information">
                         <div className="p-4 space-y-4">
                           {/* Stats grid */}
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">

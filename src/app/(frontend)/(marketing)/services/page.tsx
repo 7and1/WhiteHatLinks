@@ -15,15 +15,15 @@ import {
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Link Building Services That Actually Work - Guest Posts & Digital PR',
+  title: 'Link Building Services - Guest Posts, Niche Edits & Digital PR | WhiteHatLinks',
   description:
-    'Get real results with white hat link building. 78% of SEO pros see positive ROI from quality backlinks. Guest posts, link insertions, and digital PR that boost rankings and traffic.',
+    'Professional link building services with proven ROI. Guest posts, link insertions, and digital PR campaigns. 78% of SEO pros see positive results. Real sites, real traffic, real rankings.',
   alternates: {
     canonical: 'https://whitehatlink.org/services',
   },
   openGraph: {
-    title: 'Link Building Services That Actually Work | WhiteHatLinks',
-    description: 'White hat link building with proven ROI. Guest posts, link insertions, and digital PR.',
+    title: 'Link Building Services - Guest Posts & Digital PR | WhiteHatLinks',
+    description: 'White hat link building with proven ROI. Guest posts, link insertions, and digital PR campaigns.',
     url: 'https://whitehatlink.org/services',
   },
 }
@@ -110,7 +110,7 @@ const servicesFaqs = [
   {
     question: 'Which service is best for my needs?',
     answer:
-      'Start with guest posts if you are new to link building. You get full control. Build 5-10 quality links per month. Once you have momentum, add link insertions for faster results. Save digital PR for when you have budget and want media coverage. Most successful campaigns mix all three.',
+      'We recommend starting with guest posts if you are new to link building. You get full control. Build 5-10 quality links per month. Once you have momentum, add link insertions for faster results. Save digital PR for when you have budget and want media coverage. Most successful campaigns mix all three.',
   },
   {
     question: 'How much should I invest in link building?',
@@ -130,7 +130,7 @@ const servicesFaqs = [
   {
     question: 'Do you offer retainer packages?',
     answer:
-      'Yes. Monthly retainers work best for serious growth. You get priority access to new inventory, volume pricing, and consistent link velocity. Over 56% of link builders plan to invest more in 2025. Join them.',
+      'Yes. Monthly retainers work best for serious growth. You get priority access to new inventory, volume pricing, and consistent link velocity. Over 56% of link builders plan to invest more in 2026. Join them.',
   },
   {
     question: 'Why does quality matter more than quantity?',
@@ -221,7 +221,7 @@ export default function ServicesPage() {
         <div className="max-w-4xl mx-auto mb-20">
           <div className="prose prose-lg mx-auto">
             <h2 className="text-2xl font-bold text-foreground mb-4">
-              Why Link Building Still Matters in 2025
+              Why Link Building Still Matters in 2026
             </h2>
             <p className="text-muted-foreground mb-4">
               Let me be direct. Backlinks are still critical. Google says they are less important
@@ -431,7 +431,7 @@ export default function ServicesPage() {
             Expert Recommendations
           </h2>
           <p className="text-center text-muted-foreground mb-10">
-            Not sure where to start? Here is what works based on your situation.
+            Not sure where to start? Here is what we recommend based on your situation.
           </p>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="rounded-xl border bg-white p-6 shadow-sm">

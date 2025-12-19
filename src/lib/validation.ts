@@ -32,3 +32,35 @@ export type InquiryInput = z.infer<typeof inquirySchema>
 export function validateInquiry(data: unknown) {
   return inquirySchema.safeParse(data)
 }
+
+// Contact form validation schema
+export const contactSchema = z.object({
+  email: z
+    .string()
+    .email('Please enter a valid email address')
+    .min(5, 'Email is required')
+    .max(255, 'Email is too long'),
+  name: z
+    .string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name is too long'),
+  subject: z
+    .string()
+    .min(5, 'Subject must be at least 5 characters')
+    .max(200, 'Subject is too long')
+    .optional()
+    .or(z.literal(''))
+    .transform(val => val || 'General inquiry'),
+  message: z
+    .string()
+    .min(10, 'Message must be at least 10 characters')
+    .max(5000, 'Message is too long'),
+  // Honeypot field - should be empty
+  company_name: z.string().max(0, 'This field should be empty').optional().or(z.literal('')),
+})
+
+export type ContactInput = z.infer<typeof contactSchema>
+
+export function validateContact(data: unknown) {
+  return contactSchema.safeParse(data)
+}

@@ -29,6 +29,9 @@ export function DialogTrigger({ asChild, children }: { asChild?: boolean; childr
 
 export function DialogContent({ children, className }: { children: React.ReactNode; className?: string }) {
   const { open, onOpenChange } = useContext(DialogContext)
+  const dialogId = React.useId()
+  const titleId = `${dialogId}-title`
+
   if (!open) return null
   return (
     <div
@@ -38,12 +41,17 @@ export function DialogContent({ children, className }: { children: React.ReactNo
       }}
       role="dialog"
       aria-modal="true"
+      aria-labelledby={titleId}
     >
-      <div className={cn('relative w-full max-w-lg rounded-lg border bg-white p-6 shadow-xl', className)}>
+      <div
+        className={cn('relative w-full max-w-lg rounded-lg border bg-white p-6 shadow-xl', className)}
+        role="document"
+      >
         <button
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           onClick={() => onOpenChange?.(false)}
-          aria-label="Close"
+          aria-label="Close dialog"
+          type="button"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -55,12 +63,18 @@ export function DialogContent({ children, className }: { children: React.ReactNo
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            aria-hidden="true"
           >
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
-        {children}
+        {React.Children.map(children, child => {
+          if (React.isValidElement(child) && child.type === DialogTitle) {
+            return React.cloneElement(child as React.ReactElement<any>, { id: titleId })
+          }
+          return child
+        })}
       </div>
     </div>
   )
@@ -70,8 +84,8 @@ export function DialogHeader({ children }: { children: React.ReactNode }) {
   return <div className="mb-3 space-y-1">{children}</div>
 }
 
-export function DialogTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-lg font-semibold leading-none tracking-tight">{children}</h3>
+export function DialogTitle({ children, id }: { children: React.ReactNode; id?: string }) {
+  return <h3 id={id} className="text-lg font-semibold leading-none tracking-tight">{children}</h3>
 }
 
 export function DialogFooter({ children }: { children: React.ReactNode }) {

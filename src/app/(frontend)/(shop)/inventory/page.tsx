@@ -4,19 +4,21 @@ import { BreadcrumbSchema } from '@/components/seo'
 import { getInventory, getInventoryCount, getInventoryNiches, getInventoryRegions } from '@/lib/inventory-source'
 import type { Metadata } from 'next'
 
-// Force dynamic rendering - needs live data
-export const dynamic = 'force-dynamic'
+// ISR: Revalidate every 10 minutes (600 seconds)
+// Inventory updates frequently but can tolerate short cache
+// Use on-demand revalidation when new inventory is added
+export const revalidate = 600
 
 export const metadata: Metadata = {
-  title: 'Premium Backlink Inventory - High DR Guest Post Sites | WhiteHatLinks',
+  title: 'Premium Backlink Inventory - 16,000+ High DR Guest Post Sites | WhiteHatLinks',
   description:
-    'Browse 16,000+ vetted high-authority guest post sites. Real traffic data, transparent DR metrics, instant availability. Filter by niche, price, and domain strength. No spam, no PBNs - just real websites.',
+    'Browse 16,000+ vetted high-authority backlink sites. Real traffic data, transparent DR metrics, filter by niche and price. Guest posts and link insertions. No spam, no PBNs.',
   alternates: {
     canonical: 'https://whitehatlink.org/inventory',
   },
   openGraph: {
-    title: 'Premium Backlink Inventory - High DR Guest Post Sites | WhiteHatLinks',
-    description: 'Browse 16,000+ vetted high-authority guest post sites. Real traffic, transparent metrics, instant availability.',
+    title: 'Premium Backlink Inventory - 16,000+ High DR Sites | WhiteHatLinks',
+    description: 'Browse 16,000+ vetted guest post sites. Real traffic, transparent DR metrics, instant availability.',
     url: 'https://whitehatlink.org/inventory',
   },
 }
@@ -69,7 +71,7 @@ export default async function InventoryPage({
             Premium Backlink Inventory
           </h1>
           <p className="text-lg text-muted-foreground mb-2">
-            Browse {totalCount.toLocaleString()} vetted sites with real traffic and transparent metrics.
+            We have {totalCount.toLocaleString()} vetted sites with real traffic and transparent metrics for you to browse.
             {filters.niche && (
               <span className="font-semibold text-primary"> Filtered by: {filters.niche}</span>
             )}
@@ -281,7 +283,7 @@ export default async function InventoryPage({
               we'll help you build a strategy that works for your budget and goals.
             </p>
             <p className="text-sm text-muted-foreground">
-              Average response time: Under 4 hours during business days.
+              We respond in under 4 hours during business days.
             </p>
           </div>
         </div>

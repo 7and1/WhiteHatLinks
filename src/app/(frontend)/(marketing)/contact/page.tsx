@@ -1,20 +1,27 @@
 import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { BreadcrumbSchema } from '@/components/seo'
 import { Mail, Clock, Shield, MessageSquare } from 'lucide-react'
+import { FormSkeleton } from '@/components/ui/skeleton'
+
+// Dynamic import for ContactForm - form is below the fold
+const ContactForm = dynamic(() => import('@/components/ContactForm').then(mod => ({ default: mod.ContactForm })), {
+  loading: () => <FormSkeleton />,
+})
 
 // Revalidate every 24 hours
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Contact WhiteHatLinks - Fast Response, Real People, No BS',
+  title: 'Contact WhiteHatLinks - Get Custom Quote in 12 Hours | Link Building Experts',
   description:
-    'Talk to real link building experts. Get custom quotes within 12 hours. NDA available for agencies. Simple process: message us, get a proposal, start ranking.',
+    'Contact our link building experts. Get custom quotes within 12 hours. NDA available for agencies. Talk to real people, not bots. Free consultation on your SEO strategy.',
   alternates: {
     canonical: 'https://whitehatlink.org/contact',
   },
   openGraph: {
-    title: 'Contact WhiteHatLinks - Fast Response, Real People',
-    description: 'Talk to real link building experts. Get custom quotes within 12 hours.',
+    title: 'Contact WhiteHatLinks - Fast Response, Expert Support',
+    description: 'Talk to real link building experts. Get custom quotes within 12 hours. NDA available.',
     url: 'https://whitehatlink.org/contact',
   },
 }
@@ -55,7 +62,7 @@ export default function ContactPage() {
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-primary uppercase tracking-wide">Contact</p>
             <h1 className="text-4xl font-bold tracking-tight text-foreground mt-2">
-              Contact WhiteHatLinks
+              Contact Us
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
               Real people. Fast answers. No sales pitch.
@@ -207,7 +214,7 @@ export default function ContactPage() {
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   No. Just tell us your goals. Want to rank higher? Need more organic traffic?
-                  We&apos;ll recommend what makes sense.
+                  We&apos;ll recommend what makes sense for you.
                 </p>
               </div>
               <div>
@@ -252,102 +259,7 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div className="rounded-xl border bg-white p-8 shadow-sm">
               <h2 className="text-xl font-semibold text-foreground mb-6">Send us a message</h2>
-              <form action="/api/inquire" method="POST" className="space-y-6">
-                <input type="hidden" name="source" value="contact_page" />
-                <input
-                  type="text"
-                  name="company_name"
-                  aria-hidden="true"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  className="hidden"
-                />
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-foreground mb-2"
-                    >
-                      Work email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm"
-                      placeholder="name@company.com"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="website" className="block text-sm font-medium text-foreground mb-2">
-                    Website URL
-                  </label>
-                  <input
-                    type="url"
-                    id="website"
-                    name="url"
-                    className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm"
-                    placeholder="https://your-website.com"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="budget" className="block text-sm font-medium text-foreground mb-2">
-                    Monthly budget
-                  </label>
-                  <select
-                    id="budget"
-                    name="budget"
-                    className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm"
-                  >
-                    <option value="">Select a range</option>
-                    <option value="1000-3000">$1,000 - $3,000</option>
-                    <option value="3000-5000">$3,000 - $5,000</option>
-                    <option value="5000-10000">$5,000 - $10,000</option>
-                    <option value="10000+">$10,000+</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-foreground mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm resize-none"
-                    placeholder="Tell us about your link building goals..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full rounded-md bg-primary px-6 py-3 text-white font-semibold hover:bg-primary/90 transition-colors"
-                >
-                  Send message
-                </button>
-              </form>
+              <ContactForm />
             </div>
 
             {/* Contact Info */}

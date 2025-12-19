@@ -43,3 +43,11 @@ coverage/
 
 # Misc
 *.pem
+
+# Documentation (auto-generated)
+docs/
+*.md
+!README.md
+
+# Performance reports
+lighthouse-reports/

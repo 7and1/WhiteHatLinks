@@ -1,12 +1,57 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { generateNonce, buildCSP, CSP_HEADER, CSP_NONCE_HEADER } from '@/lib/csp'
 
 export function middleware(request: NextRequest) {
+  const url = request.nextUrl
+
+  // ==========================================
+  // URL Canonicalization
+  // ==========================================
+
+  let needsRedirect = false
+  let newPathname = url.pathname
+
+  // 1. Remove trailing slash (except for root path)
+  if (newPathname !== '/' && newPathname.endsWith('/')) {
+    newPathname = newPathname.slice(0, -1)
+    needsRedirect = true
+  }
+
+  // 2. Normalize multiple slashes to single slash
+  if (newPathname.includes('//')) {
+    newPathname = newPathname.replace(/\/+/g, '/')
+    needsRedirect = true
+  }
+
+  // 3. Lowercase URL paths (SEO best practice)
+  // Skip for admin panel to preserve case-sensitive routes
+  if (!url.pathname.startsWith('/admin') && newPathname !== newPathname.toLowerCase()) {
+    newPathname = newPathname.toLowerCase()
+    needsRedirect = true
+  }
+
+  // Perform redirect if needed
+  if (needsRedirect) {
+    const redirectUrl = new URL(newPathname + url.search, url.origin)
+    return NextResponse.redirect(redirectUrl, 308) // 308 Permanent Redirect (preserves method)
+  }
+
+  // Generate nonce for CSP
+  const nonce = generateNonce()
+
+  // Determine environment and path
+  const isDevelopment = process.env.NODE_ENV === 'development'
+  const isPayloadAdmin = request.nextUrl.pathname.startsWith('/admin')
+
   // Clone the response
   const response = NextResponse.next()
 
   // Security headers
   const headers = response.headers
+
+  // Pass nonce to the page via custom header
+  headers.set(CSP_NONCE_HEADER, nonce)
 
   // Prevent clickjacking
   headers.set('X-Frame-Options', 'DENY')
@@ -26,24 +71,17 @@ export function middleware(request: NextRequest) {
     'camera=(), microphone=(), geolocation=(), interest-cohort=()'
   )
 
-  // Content Security Policy
-  // Note: This is a relatively permissive CSP - tighten in production
-  const cspDirectives = [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Needed for Next.js
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: blob: https:",
-    "connect-src 'self' https:",
-    "frame-ancestors 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-  ]
-  headers.set('Content-Security-Policy', cspDirectives.join('; '))
+  // Content Security Policy - Production-grade with nonce
+  const csp = buildCSP({
+    nonce,
+    isDevelopment,
+    isPayloadAdmin,
+  })
+  headers.set(CSP_HEADER, csp)
 
   // Strict Transport Security (HSTS)
   // Only enable in production with HTTPS
-  if (process.env.NODE_ENV === 'production') {
+  if (!isDevelopment) {
     headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
   }
 

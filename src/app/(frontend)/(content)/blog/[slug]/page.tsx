@@ -8,8 +8,9 @@ import { ArrowLeft } from 'lucide-react'
 import { getInventory } from '@/lib/inventory-source'
 import { RichText } from '@/components/RichText'
 
-// Force dynamic rendering - needs live D1 data
-export const dynamic = 'force-dynamic'
+// ISR: Revalidate every 1 hour (3600 seconds)
+// Individual blog posts are mostly static once published
+export const revalidate = 3600
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -111,6 +112,18 @@ export default async function BlogPostPage({ params }: PageProps) {
             {post.metaDescription && (
               <p className="text-lg text-muted-foreground lead">{post.metaDescription}</p>
             )}
+            {post.tags?.length ? (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            ) : null}
             {/* Lexical rich text content */}
             {post.content && (
               <RichText content={post.content} className="mt-8" />

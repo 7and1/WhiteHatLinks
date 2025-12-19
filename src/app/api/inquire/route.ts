@@ -1,15 +1,20 @@
 import { NextResponse } from 'next/server'
 import { validateInquiry } from '@/lib/validation'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
+import { checkRateLimit, getClientIp, createRateLimitKey } from '@/lib/rate-limit-factory'
+import { sendInquiryNotification, sendInquiryConfirmation } from '@/lib/email'
+import type { CloudflareEnv } from '@/types/cloudflare'
 
 export async function POST(request: Request) {
   try {
+    // Get Cloudflare bindings (available via @opennextjs/cloudflare)
+    const env = (request as { env?: CloudflareEnv }).env
+
     // Rate limiting
-    const clientIp = getClientIp(request)
-    const rateLimitResult = rateLimit(clientIp, {
+    const rateLimitKey = createRateLimitKey(request, 'inquire')
+    const rateLimitResult = await checkRateLimit(request, rateLimitKey, {
       maxRequests: 5,
       windowMs: 60 * 1000, // 5 requests per minute
-    })
+    }, env)
 
     if (!rateLimitResult.success) {
       return NextResponse.json(
@@ -54,11 +59,13 @@ export async function POST(request: Request) {
     // Honeypot check - if company_name is filled, it's likely a bot
     if (data.company_name) {
       // Silently accept but don't process
+      const clientIp = getClientIp(request)
       console.log('Honeypot triggered', { ip: clientIp })
       return NextResponse.json({ ok: true })
     }
 
-    // Log the inquiry (in production, this would send to CRM/email)
+    // Log the inquiry
+    const clientIp = getClientIp(request)
     console.log('Inquiry received', {
       email: validation.data.email,
       url: validation.data.url,
@@ -71,14 +78,26 @@ export async function POST(request: Request) {
       timestamp: new Date().toISOString(),
     })
 
-    // TODO: Integrate with email service (Resend, etc.) in production
-    // Example:
-    // await resend.emails.send({
-    //   from: 'notifications@whitehatlink.org',
-    //   to: 'team@whitehatlink.org',
-    //   subject: `New inquiry from ${validation.data.email}`,
-    //   text: `...`,
-    // })
+    // Send email notifications
+    const emailData = {
+      email: validation.data.email,
+      name: validation.data.name,
+      url: validation.data.url,
+      message: validation.data.message,
+      budget: validation.data.budget,
+      itemId: validation.data.itemId,
+      source: validation.data.source,
+    }
+
+    // Send notification to team (non-blocking - don't wait for it)
+    sendInquiryNotification(emailData).catch(err => {
+      console.error('Failed to send team notification:', err)
+    })
+
+    // Send confirmation to customer (non-blocking)
+    sendInquiryConfirmation(emailData).catch(err => {
+      console.error('Failed to send customer confirmation:', err)
+    })
 
     return NextResponse.json(
       { ok: true, message: 'Your request has been received. We will respond within 12 hours.' },
