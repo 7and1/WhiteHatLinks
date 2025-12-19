@@ -63,9 +63,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   if (!post) return notFound()
 
-  const niche = post.related_niche
+  // Get featured inventory (no niche filter since we removed related_niche field)
   const related = await getInventory({
-    niche: niche || undefined,
     limit: 3,
     sort: 'dr',
   })
