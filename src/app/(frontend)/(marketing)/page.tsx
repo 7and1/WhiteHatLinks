@@ -4,8 +4,10 @@ import { getInventory } from '@/lib/inventory-source'
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo'
 import { CheckCircle, Shield, TrendingUp, Users, Zap, Target } from 'lucide-react'
 
+// Force dynamic rendering - database may not be available during build
+export const dynamic = 'force-dynamic'
+
 // ISR: Revalidate every 5 minutes (300 seconds)
-// Homepage shows fresh inventory but can be cached briefly
 export const revalidate = 300
 
 export const metadata: Metadata = {

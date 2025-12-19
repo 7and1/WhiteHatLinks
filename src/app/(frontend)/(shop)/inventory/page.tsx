@@ -4,9 +4,10 @@ import { BreadcrumbSchema } from '@/components/seo'
 import { getInventory, getInventoryCount, getInventoryNiches, getInventoryRegions } from '@/lib/inventory-source'
 import type { Metadata } from 'next'
 
+// Force dynamic rendering - database may not be available during build
+export const dynamic = 'force-dynamic'
+
 // ISR: Revalidate every 10 minutes (600 seconds)
-// Inventory updates frequently but can tolerate short cache
-// Use on-demand revalidation when new inventory is added
 export const revalidate = 600
 
 export const metadata: Metadata = {

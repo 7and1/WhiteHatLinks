@@ -8,8 +8,10 @@ import { ArrowLeft } from 'lucide-react'
 import { getInventory } from '@/lib/inventory-source'
 import { RichText } from '@/components/RichText'
 
-// ISR: Revalidate every 1 hour (3600 seconds)
-// Individual blog posts are mostly static once published
+// Force dynamic rendering - database may not be available during build
+export const dynamic = 'force-dynamic'
+
+// ISR: Revalidate every 1 hour (3600 seconds) when deployed
 export const revalidate = 3600
 
 interface PageProps {

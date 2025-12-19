@@ -7,9 +7,10 @@ import { getIndustryData, getAllIndustries } from '@/data/industries'
 import { CheckCircle, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react'
 import { getInventory, getInventoryCount, getInventoryNiches, getInventoryRegions } from '@/lib/inventory-source'
 
+// Force dynamic rendering - database may not be available during build
+export const dynamic = 'force-dynamic'
+
 // ISR: Revalidate every 30 minutes (1800 seconds)
-// Industry pages have both static content and dynamic inventory
-// Static generation is enabled via generateStaticParams
 export const revalidate = 1800
 
 interface PageProps {

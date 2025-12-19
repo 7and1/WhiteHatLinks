@@ -4,8 +4,10 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { BreadcrumbSchema } from '@/components/seo'
 
-// ISR: Revalidate every 1 hour (3600 seconds)
-// Blog list doesn't change frequently, can be cached longer
+// Force dynamic rendering - database may not be available during build
+export const dynamic = 'force-dynamic'
+
+// ISR: Revalidate every 1 hour (3600 seconds) when deployed
 export const revalidate = 3600
 
 export const metadata: Metadata = {
