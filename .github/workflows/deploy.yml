@@ -38,6 +38,8 @@ jobs:
       - name: Build with OpenNext
         env:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: pnpm exec opennextjs-cloudflare build
 
       - name: Deploy to Cloudflare Workers
