@@ -168,7 +168,7 @@ export interface Post {
     };
     [k: string]: unknown;
   } | null;
-  publishedDate?: string | null;
+  published_date?: string | null;
   tags?:
     | (
         | 'Guest Posting'
@@ -183,8 +183,8 @@ export interface Post {
         | 'E-commerce Link Building'
       )[]
     | null;
-  metaTitle?: string | null;
-  metaDescription?: string | null;
+  meta_title?: string | null;
+  meta_description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -356,10 +356,10 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   content?: T;
-  publishedDate?: T;
+  published_date?: T;
   tags?: T;
-  metaTitle?: T;
-  metaDescription?: T;
+  meta_title?: T;
+  meta_description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -33,22 +33,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: post.metaTitle || post.title,
-    description: post.metaDescription || `Read ${post.title} on the WhiteHatLinks blog.`,
+    title: post.meta_title || post.title,
+    description: post.meta_description || `Read ${post.title} on the WhiteHatLinks blog.`,
     alternates: {
       canonical: `https://whitehatlink.org/blog/${post.slug}`,
     },
     openGraph: {
-      title: post.metaTitle || post.title,
-      description: post.metaDescription || `Read ${post.title} on the WhiteHatLinks blog.`,
+      title: post.meta_title || post.title,
+      description: post.meta_description || `Read ${post.title} on the WhiteHatLinks blog.`,
       url: `https://whitehatlink.org/blog/${post.slug}`,
       type: 'article',
-      publishedTime: post.publishedDate || undefined,
+      publishedTime: post.published_date || undefined,
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.metaTitle || post.title,
-      description: post.metaDescription || `Read ${post.title} on the WhiteHatLinks blog.`,
+      title: post.meta_title || post.title,
+      description: post.meta_description || `Read ${post.title} on the WhiteHatLinks blog.`,
     },
   }
 }
@@ -82,10 +82,10 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
       <ArticleSchema
         title={post.title}
-        description={post.metaDescription || `Read ${post.title} on the WhiteHatLinks blog.`}
+        description={post.meta_description || `Read ${post.title} on the WhiteHatLinks blog.`}
         url={`https://whitehatlink.org/blog/${post.slug}`}
-        publishedDate={post.publishedDate || new Date().toISOString()}
-        modifiedDate={post.updatedAt || post.publishedDate || new Date().toISOString()}
+        publishedDate={post.published_date || new Date().toISOString()}
+        modifiedDate={post.updated_at || post.published_date || new Date().toISOString()}
       />
 
       <div className="container py-16">

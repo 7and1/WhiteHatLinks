@@ -33,7 +33,7 @@ export default async function BlogListPage() {
     const result = await payload.find({
       collection: 'posts',
       limit: 20,
-      sort: '-publishedDate',
+      sort: '-published_date',
     })
     docs = result.docs
   } catch (err) {
@@ -169,8 +169,8 @@ export default async function BlogListPage() {
                 className="group h-full rounded-xl border bg-white p-6 shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
               >
                 <div className="text-sm text-muted-foreground">
-                  {post.publishedDate
-                    ? new Date(post.publishedDate).toLocaleDateString('en-US', {
+                  {post.published_date
+                    ? new Date(post.published_date).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -180,9 +180,9 @@ export default async function BlogListPage() {
                 <h2 className="mt-2 text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
                   {post.title}
                 </h2>
-                {post.metaDescription && (
+                {post.meta_description && (
                   <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
-                    {post.metaDescription}
+                    {post.meta_description}
                   </p>
                 )}
                 {post.tags?.length ? (

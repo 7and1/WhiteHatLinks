@@ -4,7 +4,7 @@ export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'publishedDate', 'tags'],
+    defaultColumns: ['title', 'published_date', 'tags'],
   },
   access: {
     read: () => true,
@@ -22,7 +22,7 @@ export const Posts: CollectionConfig = {
           label: 'Content',
           fields: [
             { name: 'content', type: 'richText' },
-            { name: 'publishedDate', type: 'date' },
+            { name: 'published_date', type: 'date', label: 'Published Date' },
             {
               name: 'tags',
               type: 'select',
@@ -46,8 +46,8 @@ export const Posts: CollectionConfig = {
         {
           label: 'SEO',
           fields: [
-            { name: 'metaTitle', type: 'text', maxLength: 60 },
-            { name: 'metaDescription', type: 'textarea', maxLength: 160 },
+            { name: 'meta_title', type: 'text', maxLength: 60, label: 'Meta Title' },
+            { name: 'meta_description', type: 'textarea', maxLength: 160, label: 'Meta Description' },
           ],
         },
       ],
