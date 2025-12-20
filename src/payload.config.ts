@@ -25,16 +25,16 @@ export default buildConfig({
   // Register all collections
   collections: [Pages, Posts, Inventory, Media, Users],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: sqliteD1Adapter({
-    binding: 'D1' as any, // Use binding name as string
+    binding: 'D1' as any,
   }),
   plugins: [
     r2Storage({
-      bucket: 'R2' as any, // Use binding name as string
+      bucket: 'R2' as any,
       collections: { media: true },
     }),
   ],

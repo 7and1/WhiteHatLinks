@@ -64,8 +64,8 @@ export function buildCSP({ nonce, isDevelopment = false, isPayloadAdmin = false 
       ...(nonce ? [`'nonce-${nonce}'`] : []),
       // Google Fonts
       'https://fonts.googleapis.com',
-      // Development: allow inline styles for hot reload
-      ...(isDevelopment || isPayloadAdmin ? ["'unsafe-inline'"] : []),
+      // Allow inline styles for Next.js and React components
+      "'unsafe-inline'",
     ],
 
     // Font sources
