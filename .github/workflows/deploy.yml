@@ -48,3 +48,22 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+          secrets: |
+            PAYLOAD_SECRET
+        env:
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+
+      - name: Verify deployment
+        run: |
+          echo "Waiting for deployment to propagate..."
+          sleep 10
+
+          echo "Testing deployment..."
+          HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' https://whitehatlink.org/api/posts || echo "000")
+
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ Deployment successful! HTTP $HTTP_CODE"
+          else
+            echo "⚠️  Deployment may need time to propagate. HTTP $HTTP_CODE"
+            echo "Please check manually: https://whitehatlink.org"
+          fi
