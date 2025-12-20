@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og'
+import { siteConfig } from '@/config/site'
 
 export async function GET() {
   return new ImageResponse(
@@ -29,7 +30,7 @@ export async function GET() {
               width: 80,
               height: 80,
               borderRadius: 16,
-              backgroundColor: '#3b5bdb',
+              backgroundColor: siteConfig.themeColor,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -55,7 +56,7 @@ export async function GET() {
               letterSpacing: '-0.02em',
             }}
           >
-            WhiteHatLinks
+            {siteConfig.name}
           </span>
         </div>
 
@@ -63,12 +64,12 @@ export async function GET() {
         <div
           style={{
             fontSize: 32,
-            color: '#3b5bdb',
+            color: siteConfig.themeColor,
             fontWeight: 600,
             marginBottom: 20,
           }}
         >
-          Premium Backlinks Without Spam
+          {siteConfig.tagline}
         </div>
 
         {/* Description */}
@@ -109,7 +110,7 @@ export async function GET() {
                 style={{
                   fontSize: 36,
                   fontWeight: 700,
-                  color: '#3b5bdb',
+                  color: siteConfig.themeColor,
                 }}
               >
                 {stat.value}

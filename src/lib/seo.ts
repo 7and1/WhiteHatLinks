@@ -7,6 +7,8 @@
  * - URL normalization for consistency
  */
 
+import { siteConfig } from '@/config/site'
+
 /**
  * Supported languages and regions
  * Extend this as you add more language support
@@ -31,9 +33,9 @@ export type SupportedLocale = keyof typeof SUPPORTED_LOCALES
 
 /**
  * Base URL for the application
- * In production, this should be set via environment variable
+ * Uses centralized config, with environment variable override
  */
-export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://whitehatlink.org'
+export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url
 
 /**
  * Generate canonical URL for a given path

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { InventoryTable } from '@/components/inventory/Table'
 import { BreadcrumbSchema, FAQSchema } from '@/components/seo'
 import { notFound } from 'next/navigation'
-import { getIndustryData, getAllIndustries } from '@/data/industries'
+import { getNicheData, getAllNiches } from '@/data/niches'
 import { CheckCircle, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react'
 import { getInventory, getInventoryCount, getInventoryNiches, getInventoryRegions } from '@/lib/inventory-source'
 
@@ -19,31 +19,31 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { niche } = await params
-  const industry = getIndustryData(niche)
+  const niche = getNicheData(niche)
 
-  if (!industry) {
+  if (!niche) {
     return {
-      title: 'Industry Not Found',
+      title: 'Niche Not Found',
     }
   }
 
   return {
-    title: industry.title,
-    description: industry.metaDescription,
+    title: niche.title,
+    description: niche.metaDescription,
     alternates: {
-      canonical: `https://whitehatlink.org/industries/${industry.slug}`,
+      canonical: `https://whitehatlink.org/niches/${niche.slug}`,
     },
     openGraph: {
-      title: `${industry.title} | WhiteHatLinks`,
-      description: industry.metaDescription,
-      url: `https://whitehatlink.org/industries/${industry.slug}`,
+      title: `${niche.title} | WhiteHatLinks`,
+      description: niche.metaDescription,
+      url: `https://whitehatlink.org/niches/${niche.slug}`,
     },
   }
 }
 
 export default async function IndustryPage({ params }: PageProps) {
   const { niche } = await params
-  const industry = getIndustryData(niche)
+  const nicheData = getNicheData(niche)
 
   if (!industry) {
     return notFound()

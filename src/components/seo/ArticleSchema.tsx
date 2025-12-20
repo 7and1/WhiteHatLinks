@@ -1,3 +1,5 @@
+import { siteConfig } from '@/config/site'
+
 interface ArticleSchemaProps {
   title: string
   description: string
@@ -14,7 +16,7 @@ export function ArticleSchema({
   url,
   publishedDate,
   modifiedDate,
-  authorName = "WhiteHatLinks Team",
+  authorName = `${siteConfig.name} Team`,
   image,
 }: ArticleSchemaProps) {
   const schema = {
@@ -30,7 +32,7 @@ export function ArticleSchema({
       name: authorName,
     },
     publisher: {
-      "@id": "https://whitehatlink.org/#organization",
+      "@id": `${siteConfig.url}/#organization`,
     },
     mainEntityOfPage: {
       "@type": "WebPage",

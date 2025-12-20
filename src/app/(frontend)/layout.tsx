@@ -6,6 +6,7 @@ import './globals.css'
 import { OrganizationSchema, WebSiteSchema, AggregateRatingSchema } from '@/components/seo'
 import { ClientErrorBoundary } from '@/components/ClientErrorBoundary'
 import { CloudflareAnalytics } from '@/components/CloudflareAnalytics'
+import { siteConfig, siteTitle, siteTitleTemplate } from '@/config/site'
 
 // Dynamic import for Toaster - only load when needed (user interactions)
 const Toaster = dynamic(() => import('sonner').then(mod => ({ default: mod.Toaster })))
@@ -19,34 +20,20 @@ const inter = Inter({
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#3b5bdb',
+  themeColor: siteConfig.themeColor,
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://whitehatlink.org'),
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'WhiteHatLinks | Premium Backlinks Without Spam',
-    template: '%s | WhiteHatLinks',
+    default: siteTitle,
+    template: siteTitleTemplate,
   },
-  description:
-    'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam. Manual outreach, real editorial placements. 500+ campaigns delivered safely with 90% acceptance rate.',
-  keywords: [
-    'backlinks',
-    'guest posts',
-    'link building',
-    'SEO',
-    'link insertions',
-    'digital PR',
-    'high DR backlinks',
-    'white hat SEO',
-    'editorial backlinks',
-    'quality backlinks',
-    'buy backlinks',
-    'link building service',
-  ],
-  authors: [{ name: 'WhiteHatLinks', url: 'https://whitehatlink.org' }],
-  creator: 'WhiteHatLinks',
-  publisher: 'WhiteHatLinks',
+  description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
   category: 'SEO Services',
   classification: 'Business',
   formatDetection: {
@@ -57,30 +44,28 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://whitehatlink.org',
-    siteName: 'WhiteHatLinks',
-    title: 'WhiteHatLinks | Premium Backlinks Without Spam',
-    description:
-      'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam. 500+ campaigns delivered safely with 90% acceptance rate.',
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: siteTitle,
+    description: siteConfig.description,
     images: [
       {
         url: '/og',
         width: 1200,
         height: 630,
-        alt: 'WhiteHatLinks - Premium Backlink Acquisition Service with Transparent Metrics',
+        alt: `${siteConfig.name} - Premium Backlink Acquisition Service with Transparent Metrics`,
         type: 'image/png',
       },
     ],
-    countryName: 'United States',
+    countryName: siteConfig.country,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WhiteHatLinks | Premium Backlinks Without Spam',
-    description:
-      'Buy vetted, high-authority backlinks with transparent metrics. No PBNs, no spam. 500+ campaigns delivered safely.',
+    title: siteTitle,
+    description: siteConfig.description,
     images: ['/og'],
-    creator: '@whitehatlinks',
-    site: '@whitehatlinks',
+    creator: siteConfig.social.twitter,
+    site: siteConfig.social.twitter,
   },
   robots: {
     index: true,
@@ -115,21 +100,21 @@ export const metadata: Metadata = {
       {
         rel: 'mask-icon',
         url: '/favicon.svg',
-        color: '#3b5bdb',
+        color: siteConfig.themeColor,
       },
     ],
   },
   manifest: '/site.webmanifest',
   alternates: {
-    canonical: 'https://whitehatlink.org',
+    canonical: siteConfig.url,
     types: {
-      'application/rss+xml': 'https://whitehatlink.org/rss.xml',
+      'application/rss+xml': `${siteConfig.url}/rss.xml`,
     },
   },
   other: {
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': 'WhiteHatLinks',
+    'apple-mobile-web-app-title': siteConfig.name,
   },
 }
 
@@ -174,18 +159,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link
               href="/"
               className="flex items-center gap-2 font-bold text-lg tracking-tight text-foreground hover:text-primary transition-colors"
-              aria-label="WhiteHatLinks home"
+              aria-label={`${siteConfig.name} home`}
             >
               <img
                 src="/favicon.svg"
-                alt="WhiteHatLinks logo"
+                alt={`${siteConfig.name} logo`}
                 width={28}
                 height={28}
                 className="shrink-0"
                 loading="eager"
                 fetchPriority="high"
               />
-              <span>WhiteHatLinks</span>
+              <span>{siteConfig.name}</span>
             </Link>
             <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm">
               {navLinks.map((link) => (
@@ -215,7 +200,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="container">
             <div className="grid gap-8 md:grid-cols-4">
               <div className="space-y-4">
-                <div className="font-bold text-lg">WhiteHatLinks</div>
+                <div className="font-bold text-lg">{siteConfig.name}</div>
                 <p className="text-sm text-muted-foreground">
                   Transparent link building. No PBNs. Real traffic. Manual outreach only.
                 </p>
@@ -286,7 +271,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
 
             <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-              <p>&copy; 2026 WhiteHatLinks. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
               <div className="flex gap-6">
                 <Link href="/terms" className="hover:text-primary transition-colors">
                   Terms of Service

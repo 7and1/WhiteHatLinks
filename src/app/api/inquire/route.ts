@@ -4,10 +4,41 @@ import { checkRateLimit, getClientIp, createRateLimitKey } from '@/lib/rate-limi
 import { sendInquiryNotification, sendInquiryConfirmation } from '@/lib/email'
 import type { CloudflareEnv } from '@/types/cloudflare'
 
+// Verify Cloudflare Turnstile token
+async function verifyTurnstile(token: string, remoteIp: string): Promise<boolean> {
+  const secretKey = process.env.TURNSTILE_SECRET_KEY
+
+  if (!secretKey) {
+    console.warn('TURNSTILE_SECRET_KEY not configured, skipping verification')
+    return true // Allow in development
+  }
+
+  try {
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        secret: secretKey,
+        response: token,
+        remoteip: remoteIp,
+      }),
+    })
+
+    const data = await response.json()
+    return data.success === true
+  } catch (error) {
+    console.error('Turnstile verification error:', error)
+    return false
+  }
+}
+
 export async function POST(request: Request) {
   try {
     // Get Cloudflare bindings (available via @opennextjs/cloudflare)
     const env = (request as { env?: CloudflareEnv }).env
+    const clientIp = getClientIp(request)
 
     // Rate limiting
     const rateLimitKey = createRateLimitKey(request, 'inquire')
@@ -35,6 +66,7 @@ export async function POST(request: Request) {
 
     // Parse form data
     const formData = await request.formData()
+    const turnstileToken = formData.get('cf-turnstile-response')?.toString() || ''
     const data = {
       email: formData.get('email')?.toString() || '',
       url: formData.get('url')?.toString() || '',
@@ -44,6 +76,23 @@ export async function POST(request: Request) {
       itemId: formData.get('itemId')?.toString() || '',
       source: formData.get('source')?.toString() || '',
       company_name: formData.get('company_name')?.toString() || '', // Honeypot
+    }
+
+    // Verify Turnstile token
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { error: 'Verification required. Please complete the CAPTCHA.' },
+        { status: 400 }
+      )
+    }
+
+    const turnstileValid = await verifyTurnstile(turnstileToken, clientIp)
+    if (!turnstileValid) {
+      console.log('Turnstile verification failed', { ip: clientIp })
+      return NextResponse.json(
+        { error: 'Verification failed. Please try again.' },
+        { status: 400 }
+      )
     }
 
     // Validation
@@ -59,13 +108,11 @@ export async function POST(request: Request) {
     // Honeypot check - if company_name is filled, it's likely a bot
     if (data.company_name) {
       // Silently accept but don't process
-      const clientIp = getClientIp(request)
       console.log('Honeypot triggered', { ip: clientIp })
       return NextResponse.json({ ok: true })
     }
 
     // Log the inquiry
-    const clientIp = getClientIp(request)
     console.log('Inquiry received', {
       email: validation.data.email,
       url: validation.data.url,
@@ -76,6 +123,7 @@ export async function POST(request: Request) {
       source: validation.data.source,
       ip: clientIp,
       timestamp: new Date().toISOString(),
+      turnstileVerified: true,
     })
 
     // Send email notifications

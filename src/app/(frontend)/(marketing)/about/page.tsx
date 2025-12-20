@@ -2,20 +2,21 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BreadcrumbSchema } from '@/components/seo'
 import { Shield, Target, Users, CheckCircle, Award, Clock } from 'lucide-react'
+import { siteConfig } from '@/config/site'
 
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'About WhiteHatLinks - Expert SEO Link Building Team Since 2021',
+  title: `About ${siteConfig.name} - Expert SEO Link Building Team Since 2021`,
   description:
-    'Meet the team behind WhiteHatLinks. 15+ years combined SEO experience. 1000+ vetted publishers. Real sites, real traffic, zero PBNs. Trusted by agencies and brands worldwide.',
+    `Meet the team behind ${siteConfig.name}. 15+ years combined SEO experience. 1000+ vetted publishers. Real sites, real traffic, zero PBNs. Trusted by agencies and brands worldwide.`,
   alternates: {
-    canonical: 'https://whitehatlink.org/about',
+    canonical: `${siteConfig.url}/about`,
   },
   openGraph: {
-    title: 'About WhiteHatLinks - Expert SEO Link Building Team',
+    title: `About ${siteConfig.name} - Expert SEO Link Building Team`,
     description: '15+ years SEO experience. 1000+ vetted publishers. Real sites, real traffic, zero PBNs.',
-    url: 'https://whitehatlink.org/about',
+    url: `${siteConfig.url}/about`,
   },
 }
 
@@ -91,8 +92,8 @@ export default function AboutPage() {
     <>
       <BreadcrumbSchema
         items={[
-          { name: 'Home', url: 'https://whitehatlink.org' },
-          { name: 'About', url: 'https://whitehatlink.org/about' },
+          { name: 'Home', url: siteConfig.url },
+          { name: 'About', url: `${siteConfig.url}/about` },
         ]}
       />
 
@@ -104,7 +105,7 @@ export default function AboutPage() {
             Expert Link Building Team with 15+ Years Experience
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            The link building industry is broken. We built WhiteHatLinks to fix it.
+            The link building industry is broken. We built {siteConfig.name} to fix it.
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
             Most link building services are a scam. They sell you links from PBNs. Private blog networks that look real but are not. Google knows. Your rankings tank. You waste money.

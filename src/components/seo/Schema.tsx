@@ -1,3 +1,5 @@
+import { siteConfig } from '@/config/site'
+
 export interface InventoryItem {
   id: string
   niche: string
@@ -15,29 +17,29 @@ export function ProductSchema({ items }: { items: InventoryItem[] }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
-    "@id": "https://whitehatlink.org/inventory#catalog",
+    "@id": `${siteConfig.url}/inventory#catalog`,
     name: "Premium Backlink Inventory",
     description: "Curated list of high-authority guest post opportunities with transparent metrics. All sites manually vetted for quality.",
-    url: "https://whitehatlink.org/inventory",
+    url: `${siteConfig.url}/inventory`,
     numberOfItems: items.length,
     provider: {
-      "@id": "https://whitehatlink.org/#organization",
+      "@id": `${siteConfig.url}/#organization`,
     },
     itemListElement: items.slice(0, 20).map((item, index) => ({
       "@type": "Offer",
-      "@id": `https://whitehatlink.org/inventory#offer-${item.id}`,
+      "@id": `${siteConfig.url}/inventory#offer-${item.id}`,
       position: index + 1,
       itemOffered: {
         "@type": "Service",
-        "@id": `https://whitehatlink.org/inventory#service-${item.id}`,
+        "@id": `${siteConfig.url}/inventory#service-${item.id}`,
         name: `${item.niche} Guest Post (DR ${item.dr})`,
         description: `Permanent do-follow backlink on a DR ${item.dr} ${item.niche} website with ${item.traffic?.toLocaleString() ?? 'N/A'} monthly organic traffic. Manual outreach, editorial placement.`,
         provider: {
-          "@id": "https://whitehatlink.org/#organization",
+          "@id": `${siteConfig.url}/#organization`,
         },
         areaServed: {
           "@type": "Country",
-          name: item.region || "United States",
+          name: item.region || siteConfig.country,
         },
         serviceType: "Guest Post Link Building",
         category: item.niche,
@@ -49,9 +51,9 @@ export function ProductSchema({ items }: { items: InventoryItem[] }) {
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       seller: {
-        "@id": "https://whitehatlink.org/#organization",
+        "@id": `${siteConfig.url}/#organization`,
       },
-      url: "https://whitehatlink.org/inventory",
+      url: `${siteConfig.url}/inventory`,
       validFrom: new Date().toISOString(),
     })),
   }
@@ -68,16 +70,16 @@ export function AggregateRatingSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": "https://whitehatlink.org/#service",
-    name: "WhiteHatLinks Premium Link Building Service",
+    "@id": `${siteConfig.url}/#service`,
+    name: `${siteConfig.name} Premium Link Building Service`,
     description: "Professional white-hat link building and guest posting service with transparent metrics and manual outreach",
     provider: {
-      "@id": "https://whitehatlink.org/#organization",
+      "@id": `${siteConfig.url}/#organization`,
     },
     serviceType: "SEO Link Building Service",
     areaServed: {
       "@type": "Country",
-      name: "United States",
+      name: siteConfig.country,
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -93,7 +95,7 @@ export function AggregateRatingSchema() {
       highPrice: "2500",
       offerCount: "16000",
       availability: "https://schema.org/InStock",
-      url: "https://whitehatlink.org/inventory",
+      url: `${siteConfig.url}/inventory`,
     },
   }
 
@@ -120,7 +122,7 @@ export function OfferSchema({
   price,
   priceDescription,
   features,
-  url = "https://whitehatlink.org/pricing",
+  url = `${siteConfig.url}/pricing`,
 }: OfferSchemaProps) {
   const schema = {
     "@context": "https://schema.org",
@@ -138,14 +140,14 @@ export function OfferSchema({
     } : undefined,
     availability: "https://schema.org/InStock",
     seller: {
-      "@id": "https://whitehatlink.org/#organization",
+      "@id": `${siteConfig.url}/#organization`,
     },
     itemOffered: {
       "@type": "Service",
       name,
       description,
       provider: {
-        "@id": "https://whitehatlink.org/#organization",
+        "@id": `${siteConfig.url}/#organization`,
       },
       serviceType: "Link Building Service",
       additionalProperty: features.map(feature => ({

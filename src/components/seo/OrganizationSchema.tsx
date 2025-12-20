@@ -1,38 +1,32 @@
+import { siteConfig } from '@/config/site'
+
 export function OrganizationSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "@id": "https://whitehatlink.org/#organization",
-    name: "WhiteHatLinks",
-    url: "https://whitehatlink.org",
+    "@id": `${siteConfig.url}/#organization`,
+    name: siteConfig.name,
+    url: siteConfig.url,
     logo: {
       "@type": "ImageObject",
-      url: "https://whitehatlink.org/logo.png",
+      url: `${siteConfig.url}/logo.png`,
       width: 512,
       height: 512,
     },
-    description:
-      "Premium backlink acquisition service. Vetted, high-authority guest posts and link insertions with transparent metrics. No PBNs, no spam.",
-    foundingDate: "2023",
+    description: siteConfig.shortDescription,
+    foundingDate: siteConfig.foundingDate,
     sameAs: [],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "hello@whitehatlink.org",
+      email: siteConfig.email,
       contactType: "customer service",
       availableLanguage: ["English"],
     },
     areaServed: {
       "@type": "Country",
-      name: "United States",
+      name: siteConfig.country,
     },
-    knowsAbout: [
-      "Link Building",
-      "Guest Posting",
-      "SEO",
-      "Digital PR",
-      "Content Marketing",
-      "Backlink Acquisition",
-    ],
+    knowsAbout: siteConfig.expertise,
   }
 
   return (

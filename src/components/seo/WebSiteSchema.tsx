@@ -1,19 +1,21 @@
+import { siteConfig } from '@/config/site'
+
 export function WebSiteSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": "https://whitehatlink.org/#website",
-    url: "https://whitehatlink.org",
-    name: "WhiteHatLinks",
-    description: "Premium backlinks without spam. Vetted, high-authority guest posts.",
+    "@id": `${siteConfig.url}/#website`,
+    url: siteConfig.url,
+    name: siteConfig.name,
+    description: siteConfig.shortDescription,
     publisher: {
-      "@id": "https://whitehatlink.org/#organization",
+      "@id": `${siteConfig.url}/#organization`,
     },
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://whitehatlink.org/inventory?niche={search_term_string}",
+        urlTemplate: `${siteConfig.url}/inventory?niche={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },

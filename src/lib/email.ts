@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { siteConfig } from '@/config/site'
 
 // Lazy initialization of Resend client to avoid build-time errors
 // In production, set RESEND_API_KEY as a Cloudflare Worker secret using:
@@ -17,9 +18,9 @@ function getResendClient(): Resend {
 }
 
 // Email addresses
-const FROM_EMAIL = 'notifications@whitehatlink.org'
-const TO_EMAIL = 'hello@whitehatlink.org'
-const REPLY_TO_EMAIL = 'hello@whitehatlink.org'
+const FROM_EMAIL = `notifications@${siteConfig.domain}`
+const TO_EMAIL = siteConfig.email
+const REPLY_TO_EMAIL = siteConfig.email
 
 export interface InquiryEmailData {
   email: string
@@ -82,7 +83,7 @@ export async function sendInquiryConfirmation(data: InquiryEmailData) {
       from: FROM_EMAIL,
       to: data.email,
       replyTo: REPLY_TO_EMAIL,
-      subject: 'We received your inquiry - WhiteHatLinks',
+      subject: `We received your inquiry - ${siteConfig.name}`,
       html: generateConfirmationEmailHTML(data),
       text: generateConfirmationEmailText(data),
     })
@@ -136,7 +137,7 @@ export async function sendContactConfirmation(data: ContactEmailData) {
       from: FROM_EMAIL,
       to: data.email,
       replyTo: REPLY_TO_EMAIL,
-      subject: 'We received your message - WhiteHatLinks',
+      subject: `We received your message - ${siteConfig.name}`,
       html: generateContactConfirmationHTML(data),
       text: generateContactConfirmationText(data),
     })
@@ -214,9 +215,9 @@ function generateInquiryEmailHTML(data: InquiryEmailData): string {
     </div>
 
     <div style="margin-top: 20px; text-align: center; color: #6b7280; font-size: 14px;">
-      <p>This inquiry was submitted via WhiteHatLinks inventory.</p>
+      <p>This inquiry was submitted via ${siteConfig.name} inventory.</p>
       <p style="margin-top: 10px;">
-        <a href="https://whitehatlink.org" style="color: #667eea; text-decoration: none;">WhiteHatLinks.org</a>
+        <a href="${siteConfig.url}" style="color: #667eea; text-decoration: none;">${siteConfig.domain}</a>
       </p>
     </div>
   </div>
@@ -247,7 +248,7 @@ ${data.message || 'No message provided'}
 
 ---
 Reply to: ${data.email}
-WhiteHatLinks.org
+${siteConfig.domain}
   `.trim()
 }
 
@@ -271,7 +272,7 @@ function generateConfirmationEmailHTML(data: InquiryEmailData): string {
     <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
       <p style="margin-top: 0; font-size: 16px;">Hi ${name},</p>
 
-      <p>Thank you for your interest in WhiteHatLinks! We've received your inquiry and our team will review it shortly.</p>
+      <p>Thank you for your interest in ${siteConfig.name}! We've received your inquiry and our team will review it shortly.</p>
 
       <div style="background: #f0f9ff; border-left: 4px solid #667eea; padding: 15px; margin: 20px 0; border-radius: 4px;">
         <p style="margin: 0; font-weight: 500; color: #667eea;">⏱️ Expected Response Time: Within 12 hours</p>
@@ -285,25 +286,25 @@ function generateConfirmationEmailHTML(data: InquiryEmailData): string {
       </ul>
 
       <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 4px;">
-        <p style="margin: 0; font-size: 14px;"><strong>📧 Add us to your contacts:</strong> To ensure you receive our response, please add <strong>hello@whitehatlink.org</strong> to your contacts or safe senders list.</p>
+        <p style="margin: 0; font-size: 14px;"><strong>📧 Add us to your contacts:</strong> To ensure you receive our response, please add <strong>${siteConfig.email}</strong> to your contacts or safe senders list.</p>
       </div>
 
       <p>In the meantime, feel free to:</p>
       <ul style="padding-left: 20px; line-height: 1.8;">
-        <li><a href="https://whitehatlink.org/inventory" style="color: #667eea;">Browse our inventory</a></li>
-        <li><a href="https://whitehatlink.org/services" style="color: #667eea;">Learn about our services</a></li>
-        <li><a href="https://whitehatlink.org/blog" style="color: #667eea;">Read our blog</a></li>
+        <li><a href="${siteConfig.url}/inventory" style="color: #667eea;">Browse our inventory</a></li>
+        <li><a href="${siteConfig.url}/services" style="color: #667eea;">Learn about our services</a></li>
+        <li><a href="${siteConfig.url}/blog" style="color: #667eea;">Read our blog</a></li>
       </ul>
 
       <p style="margin-top: 25px;">If you have any urgent questions, please reply to this email.</p>
 
-      <p style="margin-bottom: 0;">Best regards,<br><strong>The WhiteHatLinks Team</strong></p>
+      <p style="margin-bottom: 0;">Best regards,<br><strong>The ${siteConfig.name} Team</strong></p>
     </div>
 
     <div style="margin-top: 20px; text-align: center; color: #6b7280; font-size: 14px;">
       <p>
-        <a href="https://whitehatlink.org" style="color: #667eea; text-decoration: none;">WhiteHatLinks.org</a> |
-        <a href="mailto:hello@whitehatlink.org" style="color: #667eea; text-decoration: none;">hello@whitehatlink.org</a>
+        <a href="${siteConfig.url}" style="color: #667eea; text-decoration: none;">${siteConfig.domain}</a> |
+        <a href="mailto:${siteConfig.email}" style="color: #667eea; text-decoration: none;">${siteConfig.email}</a>
       </p>
     </div>
   </div>
@@ -320,7 +321,7 @@ We Received Your Inquiry!
 
 Hi ${name},
 
-Thank you for your interest in WhiteHatLinks! We've received your inquiry and our team will review it shortly.
+Thank you for your interest in ${siteConfig.name}! We've received your inquiry and our team will review it shortly.
 
 Expected Response Time: Within 12 hours
 
@@ -329,19 +330,19 @@ What happens next?
 - We'll prepare a customized proposal with relevant opportunities
 - You'll receive a detailed response via email
 
-Add us to your contacts: To ensure you receive our response, please add hello@whitehatlink.org to your contacts or safe senders list.
+Add us to your contacts: To ensure you receive our response, please add ${siteConfig.email} to your contacts or safe senders list.
 
 In the meantime, feel free to:
-- Browse our inventory: https://whitehatlink.org/inventory
-- Learn about our services: https://whitehatlink.org/services
-- Read our blog: https://whitehatlink.org/blog
+- Browse our inventory: ${siteConfig.url}/inventory
+- Learn about our services: ${siteConfig.url}/services
+- Read our blog: ${siteConfig.url}/blog
 
 If you have any urgent questions, please reply to this email.
 
 Best regards,
-The WhiteHatLinks Team
+The ${siteConfig.name} Team
 
-WhiteHatLinks.org | hello@whitehatlink.org
+${siteConfig.domain} | ${siteConfig.email}
   `.trim()
 }
 
@@ -389,9 +390,9 @@ function generateContactEmailHTML(data: ContactEmailData): string {
     </div>
 
     <div style="margin-top: 20px; text-align: center; color: #6b7280; font-size: 14px;">
-      <p>This message was submitted via the WhiteHatLinks contact form.</p>
+      <p>This message was submitted via the ${siteConfig.name} contact form.</p>
       <p style="margin-top: 10px;">
-        <a href="https://whitehatlink.org" style="color: #667eea; text-decoration: none;">WhiteHatLinks.org</a>
+        <a href="${siteConfig.url}" style="color: #667eea; text-decoration: none;">${siteConfig.domain}</a>
       </p>
     </div>
   </div>
@@ -416,7 +417,7 @@ ${data.message || 'No message provided'}
 
 ---
 Reply to: ${data.email}
-WhiteHatLinks.org
+${siteConfig.domain}
   `.trim()
 }
 
@@ -438,7 +439,7 @@ function generateContactConfirmationHTML(data: ContactEmailData): string {
     <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
       <p style="margin-top: 0; font-size: 16px;">Hi ${data.name},</p>
 
-      <p>Thank you for reaching out to WhiteHatLinks! We've received your message and will get back to you as soon as possible.</p>
+      <p>Thank you for reaching out to ${siteConfig.name}! We've received your message and will get back to you as soon as possible.</p>
 
       <div style="background: #f0f9ff; border-left: 4px solid #667eea; padding: 15px; margin: 20px 0; border-radius: 4px;">
         <p style="margin: 0; font-weight: 500; color: #667eea;">⏱️ Expected Response Time: Within 24 hours</p>
@@ -452,13 +453,13 @@ function generateContactConfirmationHTML(data: ContactEmailData): string {
 
       <p style="margin-top: 25px;">If you have any urgent questions, feel free to reply to this email.</p>
 
-      <p style="margin-bottom: 0;">Best regards,<br><strong>The WhiteHatLinks Team</strong></p>
+      <p style="margin-bottom: 0;">Best regards,<br><strong>The ${siteConfig.name} Team</strong></p>
     </div>
 
     <div style="margin-top: 20px; text-align: center; color: #6b7280; font-size: 14px;">
       <p>
-        <a href="https://whitehatlink.org" style="color: #667eea; text-decoration: none;">WhiteHatLinks.org</a> |
-        <a href="mailto:hello@whitehatlink.org" style="color: #667eea; text-decoration: none;">hello@whitehatlink.org</a>
+        <a href="${siteConfig.url}" style="color: #667eea; text-decoration: none;">${siteConfig.domain}</a> |
+        <a href="mailto:${siteConfig.email}" style="color: #667eea; text-decoration: none;">${siteConfig.email}</a>
       </p>
     </div>
   </div>
@@ -473,7 +474,7 @@ Thank You for Contacting Us!
 
 Hi ${data.name},
 
-Thank you for reaching out to WhiteHatLinks! We've received your message and will get back to you as soon as possible.
+Thank you for reaching out to ${siteConfig.name}! We've received your message and will get back to you as soon as possible.
 
 Expected Response Time: Within 24 hours
 
@@ -484,8 +485,8 @@ Check your spam folder: Sometimes our replies end up in spam. Please check there
 If you have any urgent questions, feel free to reply to this email.
 
 Best regards,
-The WhiteHatLinks Team
+The ${siteConfig.name} Team
 
-WhiteHatLinks.org | hello@whitehatlink.org
+${siteConfig.domain} | ${siteConfig.email}
   `.trim()
 }
