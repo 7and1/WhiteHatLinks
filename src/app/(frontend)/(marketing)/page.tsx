@@ -466,20 +466,20 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Industries Section */}
-        <section aria-labelledby="industries-heading">
+        {/* Niches Section */}
+        <section aria-labelledby="niches-heading">
           <div className="text-center mb-10">
-            <h2 id="industries-heading" className="text-3xl font-bold text-foreground mb-4">Industries We Serve</h2>
+            <h2 id="niches-heading" className="text-3xl font-bold text-foreground mb-4">Niches We Serve</h2>
             <p className="text-muted-foreground">We have niche-specific inventory across all major verticals</p>
           </div>
           <div className="grid gap-4 md:grid-cols-5">
-            {['SaaS', 'Finance', 'Crypto', 'Health', 'Tech'].map((industry) => (
+            {['SaaS', 'Finance', 'Crypto', 'Health', 'Tech'].map((niche) => (
               <Link
-                key={industry}
-                href={`/industries/${industry.toLowerCase()}`}
+                key={niche}
+                href={`/niches/${niche.toLowerCase()}`}
                 className="rounded-lg border bg-white p-4 text-center font-semibold text-foreground hover:border-primary hover:shadow-sm transition-all"
               >
-                {industry}
+                {niche}
               </Link>
             ))}
           </div>

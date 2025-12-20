@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
-import { getAllIndustries } from '@/data/industries'
+import { getAllNiches } from '@/data/niches'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 3600
@@ -29,7 +29,7 @@ export default async function SitemapPage() {
     sort: '-publishedDate',
   })
 
-  const industries = getAllIndustries()
+  const niches = getAllNiches()
 
   const sections: SitemapSection[] = [
     {
@@ -45,11 +45,11 @@ export default async function SitemapPage() {
       ],
     },
     {
-      title: 'Industries',
-      links: industries.map((industry) => ({
-        href: `/industries/${industry.slug}`,
-        label: industry.name,
-        description: industry.description,
+      title: 'Niches',
+      links: niches.map((niche) => ({
+        href: `/niches/${niche.slug}`,
+        label: niche.name,
+        description: niche.description,
       })),
     },
     {

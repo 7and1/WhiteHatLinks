@@ -232,8 +232,8 @@ describe('SEO Utilities', () => {
     })
 
     it('should handle path with numbers', () => {
-      const url = getCanonicalUrl('/industries/123')
-      expect(url).toBe(`${BASE_URL}/industries/123`)
+      const url = getCanonicalUrl('/niches/123')
+      expect(url).toBe(`${BASE_URL}/niches/123`)
     })
 
     it('should handle very long paths', () => {

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
-import { getAllIndustries } from '@/data/industries'
+import { getAllNiches } from '@/data/niches'
 
 // Cache for 1 hour to reduce D1 load
 export const revalidate = 3600
@@ -22,8 +22,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     sort: '-updatedAt',
   })
 
-  // Get all industries from static data
-  const industries = getAllIndustries()
+  // Get all niches from static data
+  const niches = getAllNiches()
 
   // Get current date for inventory (updates daily)
   const now = new Date()
@@ -122,13 +122,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
-  // Industry routes - high priority as they're conversion-focused
-  const industryRoutes: MetadataRoute.Sitemap = industries.map((industry) => ({
-    url: `${base}/industries/${industry.slug}`,
+  // Niche routes - high priority as they're conversion-focused
+  const nicheRoutes: MetadataRoute.Sitemap = niches.map((niche) => ({
+    url: `${base}/niches/${niche.slug}`,
     lastModified: buildTime,
     changeFrequency: 'weekly' as const,
     priority: 0.82, // Between pricing and blog
   }))
 
-  return [...staticRoutes, ...postRoutes, ...industryRoutes]
+  return [...staticRoutes, ...postRoutes, ...nicheRoutes]
 }

@@ -19,37 +19,37 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { niche } = await params
-  const niche = getNicheData(niche)
+  const nicheData = getNicheData(niche)
 
-  if (!niche) {
+  if (!nicheData) {
     return {
       title: 'Niche Not Found',
     }
   }
 
   return {
-    title: niche.title,
-    description: niche.metaDescription,
+    title: nicheData.title,
+    description: nicheData.metaDescription,
     alternates: {
-      canonical: `https://whitehatlink.org/niches/${niche.slug}`,
+      canonical: `https://whitehatlink.org/niches/${nicheData.slug}`,
     },
     openGraph: {
-      title: `${niche.title} | WhiteHatLinks`,
-      description: niche.metaDescription,
-      url: `https://whitehatlink.org/niches/${niche.slug}`,
+      title: `${nicheData.title} | WhiteHatLinks`,
+      description: nicheData.metaDescription,
+      url: `https://whitehatlink.org/niches/${nicheData.slug}`,
     },
   }
 }
 
-export default async function IndustryPage({ params }: PageProps) {
+export default async function NichePage({ params }: PageProps) {
   const { niche } = await params
   const nicheData = getNicheData(niche)
 
-  if (!industry) {
+  if (!nicheData) {
     return notFound()
   }
 
-  const nicheFilter = { niche: industry.name }
+  const nicheFilter = { niche: nicheData.name }
   const [items, totalCount, niches, regions] = await Promise.all([
     getInventory({ ...nicheFilter, limit: 50, sort: 'dr' }),
     getInventoryCount(nicheFilter),
@@ -58,18 +58,18 @@ export default async function IndustryPage({ params }: PageProps) {
   ])
 
   // Generate FAQ schema from challenges
-  const industryFaqs = [
+  const nicheFaqs = [
     {
-      question: `Why is ${industry.name} link building challenging?`,
-      answer: industry.challenges.join(' '),
+      question: `Why is ${nicheData.name} link building challenging?`,
+      answer: nicheData.challenges.join(' '),
     },
     {
-      question: `What makes WhiteHatLinks different for ${industry.name}?`,
-      answer: industry.benefits.join(' '),
+      question: `What makes WhiteHatLinks different for ${nicheData.name}?`,
+      answer: nicheData.benefits.join(' '),
     },
     {
-      question: `How many ${industry.name} sites do you have?`,
-      answer: `We currently have ${items.length} ${industry.name} sites in our active inventory, with new sites added regularly.`,
+      question: `How many ${nicheData.name} sites do you have?`,
+      answer: `We currently have ${items.length} ${nicheData.name} sites in our active inventory, with new sites added regularly.`,
     },
   ]
 
@@ -78,26 +78,26 @@ export default async function IndustryPage({ params }: PageProps) {
       <BreadcrumbSchema
         items={[
           { name: 'Home', url: 'https://whitehatlink.org' },
-          { name: `${industry.name} Link Building`, url: `https://whitehatlink.org/industries/${industry.slug}` },
+          { name: `${nicheData.name} Link Building`, url: `https://whitehatlink.org/niches/${nicheData.slug}` },
         ]}
       />
-      <FAQSchema faqs={industryFaqs} />
+      <FAQSchema faqs={nicheFaqs} />
 
       <div className="container py-16">
         {/* Hero */}
         <div className="max-w-3xl mb-12">
           <p className="text-sm font-semibold text-primary uppercase tracking-wide">
-            {industry.name} Link Building
+            {nicheData.name} Link Building
           </p>
           <h1 className="text-4xl font-bold tracking-tight text-foreground mt-2">
-            {industry.title}
+            {nicheData.title}
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground">{industry.content.intro}</p>
+          <p className="mt-4 text-lg text-muted-foreground">{nicheData.content.intro}</p>
         </div>
 
         {/* Stats */}
         <div className="grid gap-4 md:grid-cols-3 mb-12">
-          {industry.stats.map((stat) => (
+          {nicheData.stats.map((stat) => (
             <div
               key={stat.label}
               className="rounded-xl border bg-white p-6 shadow-sm text-center"
@@ -113,7 +113,7 @@ export default async function IndustryPage({ params }: PageProps) {
           <div className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-foreground">
-                Available {industry.name} Sites
+                Available {nicheData.name} Sites
               </h2>
               <Link
                 href="/inventory"
@@ -132,13 +132,13 @@ export default async function IndustryPage({ params }: PageProps) {
         ) : (
           <div className="mb-16 rounded-xl border bg-secondary/50 p-8 text-center">
             <p className="text-muted-foreground">
-              No {industry.name} sites currently available. New inventory is added regularly.
+              No {nicheData.name} sites currently available. New inventory is added regularly.
             </p>
             <Link
               href="/contact"
               className="mt-4 inline-flex rounded-md bg-primary px-4 py-2 text-white font-semibold hover:bg-primary/90 transition-colors"
             >
-              Request {industry.name} sites
+              Request {nicheData.name} sites
             </Link>
           </div>
         )}
@@ -152,12 +152,12 @@ export default async function IndustryPage({ params }: PageProps) {
                 <AlertTriangle className="h-5 w-5 text-orange-600" />
               </div>
               <h2 className="text-xl font-bold text-foreground">
-                Why {industry.name} link building is hard
+                Why {nicheData.name} link building is hard
               </h2>
             </div>
-            <p className="text-muted-foreground mb-6">{industry.content.whyHard}</p>
+            <p className="text-muted-foreground mb-6">{nicheData.content.whyHard}</p>
             <ul className="space-y-3">
-              {industry.challenges.map((challenge) => (
+              {nicheData.challenges.map((challenge) => (
                 <li key={challenge} className="flex items-start gap-2 text-sm">
                   <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-orange-500 flex-shrink-0" />
                   <span className="text-muted-foreground">{challenge}</span>
@@ -172,11 +172,11 @@ export default async function IndustryPage({ params }: PageProps) {
               <div className="rounded-full bg-primary/10 p-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
               </div>
-              <h2 className="text-xl font-bold text-foreground">Our {industry.name} approach</h2>
+              <h2 className="text-xl font-bold text-foreground">Our {nicheData.name} approach</h2>
             </div>
-            <p className="text-muted-foreground mb-6">{industry.content.solution}</p>
+            <p className="text-muted-foreground mb-6">{nicheData.content.solution}</p>
             <ul className="space-y-3">
-              {industry.benefits.map((benefit) => (
+              {nicheData.benefits.map((benefit) => (
                 <li key={benefit} className="flex items-start gap-2 text-sm">
                   <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <span className="text-muted-foreground">{benefit}</span>
@@ -188,14 +188,14 @@ export default async function IndustryPage({ params }: PageProps) {
 
         {/* Other Industries */}
         <div className="mb-16">
-          <h2 className="text-xl font-bold text-foreground mb-6">Other industries we serve</h2>
+          <h2 className="text-xl font-bold text-foreground mb-6">Other niches we serve</h2>
           <div className="grid gap-3 md:grid-cols-5">
-            {getAllIndustries()
-              .filter((i) => i.slug !== industry.slug)
+            {getAllNiches()
+              .filter((i) => i.slug !== nicheData.slug)
               .map((ind) => (
                 <Link
                   key={ind.slug}
-                  href={`/industries/${ind.slug}`}
+                  href={`/niches/${ind.slug}`}
                   className="rounded-lg border bg-white p-4 text-center font-medium text-foreground hover:border-primary hover:shadow-sm transition-all"
                 >
                   {ind.name}
@@ -207,10 +207,10 @@ export default async function IndustryPage({ params }: PageProps) {
         {/* CTA */}
         <div className="rounded-2xl bg-gradient-to-r from-primary/10 via-white to-white border p-10 text-center">
           <h2 className="text-2xl font-bold text-foreground mb-4">
-            Ready to build {industry.name} backlinks?
+            Ready to build {nicheData.name} backlinks?
           </h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            Get a custom quote for your {industry.name} link building campaign.
+            Get a custom quote for your {nicheData.name} link building campaign.
           </p>
           <div className="flex justify-center gap-4">
             <Link
@@ -233,7 +233,7 @@ export default async function IndustryPage({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-  return getAllIndustries().map((industry) => ({
+  return getAllNiches().map((industry) => ({
     niche: industry.slug,
   }))
 }

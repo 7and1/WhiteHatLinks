@@ -231,7 +231,7 @@ describe('Middleware', () => {
     })
 
     it('should handle paths with numbers', () => {
-      const request = createRequest('/industries/123')
+      const request = createRequest('/niches/123')
       const response = middleware(request)
 
       // Should not redirect if already canonical
