@@ -48,7 +48,3 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
-          secrets: |
-            PAYLOAD_SECRET
-        env:
-          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
