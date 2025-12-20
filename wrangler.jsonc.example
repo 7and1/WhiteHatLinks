@@ -18,25 +18,20 @@
   "d1_databases": [
     {
       "binding": "D1",
-      "database_id": "YOUR_DATABASE_ID_HERE",
+      "database_id": "YOUR_D1_DATABASE_ID",
       "database_name": "whitehatlinks-db",
-      "remote": false
+      "remote": true
     }
   ],
   "r2_buckets": [
     {
       "binding": "R2",
-      "bucket_name": "YOUR_R2_BUCKET_NAME_HERE"
-    }
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "RATE_LIMIT_KV",
-      "id": "YOUR_KV_NAMESPACE_ID_HERE"
+      "bucket_name": "YOUR_R2_BUCKET_NAME"
     }
   ],
 
   // Environment Variables - REQUIRED for Cloudflare Workers
+  // NOTE: PAYLOAD_SECRET should be set via Cloudflare Dashboard or wrangler secret
   "vars": {
     "NODE_ENV": "production",
     "NEXT_PUBLIC_SERVER_URL": "https://YOUR_WORKER_NAME.workers.dev"

@@ -31,9 +31,8 @@ jobs:
       - name: Create wrangler config from template
         run: |
           cp wrangler.jsonc.example wrangler.jsonc
-          sed -i 's/YOUR_DATABASE_ID_HERE/${{ secrets.D1_DATABASE_ID }}/g' wrangler.jsonc
-          sed -i 's/YOUR_R2_BUCKET_NAME_HERE/${{ secrets.R2_BUCKET_NAME }}/g' wrangler.jsonc
-          sed -i 's/YOUR_KV_NAMESPACE_ID_HERE/${{ secrets.KV_NAMESPACE_ID }}/g' wrangler.jsonc
+          sed -i 's/YOUR_D1_DATABASE_ID/${{ secrets.D1_DATABASE_ID }}/g' wrangler.jsonc
+          sed -i 's/YOUR_R2_BUCKET_NAME/${{ secrets.R2_BUCKET_NAME }}/g' wrangler.jsonc
           sed -i 's|https://YOUR_WORKER_NAME.workers.dev|${{ secrets.WORKER_URL }}|g' wrangler.jsonc
 
       - name: Build with OpenNext
