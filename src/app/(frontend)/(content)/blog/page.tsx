@@ -25,8 +25,8 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogListPage() {
-  let docs = []
-  let error = null
+  let docs: any[] = []
+  let error: Error | null = null
 
   try {
     const payload = await getPayload({ config: configPromise })
@@ -38,7 +38,7 @@ export default async function BlogListPage() {
     docs = result.docs
   } catch (err) {
     console.error('Failed to load blog posts:', err)
-    error = err
+    error = err as Error
   }
 
   return (
@@ -187,7 +187,7 @@ export default async function BlogListPage() {
                 )}
                 {post.tags?.length ? (
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
+                    {post.tags.map((tag: string) => (
                       <span
                         key={tag}
                         className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
