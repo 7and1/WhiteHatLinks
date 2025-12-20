@@ -121,9 +121,9 @@ export default async function SitemapPage() {
                         <span className="font-medium text-foreground group-hover:text-primary transition-colors block">
                           {post.title}
                         </span>
-                        {post.metaDescription && (
+                        {post.meta_description && (
                           <span className="text-sm text-muted-foreground mt-1 line-clamp-1 block">
-                            {post.metaDescription}
+                            {post.meta_description}
                           </span>
                         )}
                         {post.tags && post.tags.length > 0 && (
@@ -140,8 +140,8 @@ export default async function SitemapPage() {
                         )}
                       </div>
                       <span className="text-sm text-muted-foreground ml-4 shrink-0">
-                        {post.publishedDate
-                          ? new Date(post.publishedDate).toLocaleDateString('en-US', {
+                        {post.published_date
+                          ? new Date(post.published_date).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'short',
                               day: 'numeric',

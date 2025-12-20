@@ -85,7 +85,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         description={post.meta_description || `Read ${post.title} on the WhiteHatLinks blog.`}
         url={`https://whitehatlink.org/blog/${post.slug}`}
         publishedDate={post.published_date || new Date().toISOString()}
-        modifiedDate={post.updated_at || post.published_date || new Date().toISOString()}
+        modifiedDate={(post as any).updated_at || post.published_date || new Date().toISOString()}
       />
 
       <div className="container py-16">
@@ -102,16 +102,16 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(280px,0.3fr)]">
           <article className="prose max-w-none">
             <div className="text-sm text-muted-foreground mb-4">
-              {post.publishedDate
-                ? new Date(post.publishedDate).toLocaleDateString('en-US', {
+              {post.published_date
+                ? new Date(post.published_date).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
                   })
                 : 'Draft'}
             </div>
-            {post.metaDescription && (
-              <p className="text-lg text-muted-foreground lead">{post.metaDescription}</p>
+            {post.meta_description && (
+              <p className="text-lg text-muted-foreground lead">{post.meta_description}</p>
             )}
             {post.tags?.length ? (
               <div className="mt-4 flex flex-wrap gap-2">

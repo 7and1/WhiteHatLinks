@@ -104,7 +104,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Blog post routes with dynamic priority based on recency
   const postRoutes: MetadataRoute.Sitemap = posts.map((post) => {
-    const postDate = post.publishedDate ? new Date(post.publishedDate) : new Date()
+    const postDate = post.published_date ? new Date(post.published_date) : new Date()
     const daysSincePublish = Math.floor((now.getTime() - postDate.getTime()) / (1000 * 60 * 60 * 24))
 
     // Fresh posts (< 30 days) get higher priority
