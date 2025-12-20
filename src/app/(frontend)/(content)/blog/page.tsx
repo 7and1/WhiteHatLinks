@@ -25,12 +25,21 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogListPage() {
-  const payload = await getPayload({ config: configPromise })
-  const { docs } = await payload.find({
-    collection: 'posts',
-    limit: 20,
-    sort: '-publishedDate',
-  })
+  let docs = []
+  let error = null
+
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const result = await payload.find({
+      collection: 'posts',
+      limit: 20,
+      sort: '-publishedDate',
+    })
+    docs = result.docs
+  } catch (err) {
+    console.error('Failed to load blog posts:', err)
+    error = err
+  }
 
   return (
     <>
@@ -130,7 +139,28 @@ export default async function BlogListPage() {
           </div>
         </div>
 
-        {docs.length > 0 ? (
+        {error ? (
+          <div className="mt-8 rounded-xl border bg-red-50 p-12 text-center">
+            <h2 className="text-xl font-semibold text-red-800 mb-4">Unable to Load Articles</h2>
+            <p className="text-red-600 mb-6">
+              We&apos;re having trouble loading our blog posts. Please try again later or contact our support team.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link
+                href="/inventory"
+                className="rounded-md bg-primary px-4 py-2 text-white font-semibold hover:bg-primary/90 transition-colors"
+              >
+                View inventory
+              </Link>
+              <Link
+                href="/contact"
+                className="rounded-md border px-4 py-2 font-semibold text-foreground hover:bg-secondary transition-colors"
+              >
+                Contact us
+              </Link>
+            </div>
+          </div>
+        ) : docs.length > 0 ? (
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {docs.map((post) => (
               <Link
