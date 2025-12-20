@@ -26,7 +26,7 @@ async function verifyTurnstile(token: string, remoteIp: string): Promise<boolean
       }),
     })
 
-    const data = await response.json()
+    const data = await response.json() as { success: boolean }
     return data.success === true
   } catch (error) {
     console.error('Turnstile verification error:', error)

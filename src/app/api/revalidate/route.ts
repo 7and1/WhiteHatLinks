@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse request body
-    const body = await request.json().catch(() => ({}))
+    const body = await request.json().catch(() => ({})) as { path?: string, tag?: string, type?: string }
     const { path, tag, type = 'path' } = body
 
     // Revalidate by path or tag
